@@ -1,5 +1,8 @@
+import { setHerodotusData, getHerodotusData } from "../misc";
+
 const ethPriceElement = document.querySelector("#ethPrice > span");
 let loginButton: HTMLButtonElement;
+let modal: HTMLDivElement;
 
 if (ethPriceElement) {
   loginButton = document.createElement("button");
@@ -19,7 +22,7 @@ if (ethPriceElement) {
 }
 
 // Create the modal
-const modal = document.createElement("div");
+modal = document.createElement("div");
 modal.style.display = "none";
 modal.style.position = "fixed";
 modal.style.zIndex = "1";
@@ -46,6 +49,27 @@ modal.innerHTML = `
 `;
 document.body.appendChild(modal);
 
+// Retrieve stored data on load and update the UI
+getHerodotusData((data) => {
+  if (data) {
+    // Data found, update button and fields
+    loginButton.innerHTML = "🛰️ <strong>Herodotus (Logged In)</strong>";
+
+    const destinationChainSelect = document.getElementById(
+      "destinationChain"
+    ) as HTMLSelectElement;
+    const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
+
+    if (destinationChainSelect && data.destinationChain) {
+      destinationChainSelect.value = data.destinationChain;
+    }
+
+    if (apiKeyInput && data.apiKey) {
+      apiKeyInput.value = data.apiKey;
+    }
+  }
+});
+
 // Handle the submit button click
 (document.getElementById("submitButton") as HTMLButtonElement).onclick =
   function () {
@@ -55,15 +79,9 @@ document.body.appendChild(modal);
     const apiKey = (document.getElementById("apiKey") as HTMLInputElement)
       .value;
 
-    // Store the login data and destination chain in window.herodotus
-    window.herodotus = window.herodotus || {};
-    window.herodotus.destinationChain = destinationChain;
-    window.herodotus.apiKey = apiKey;
+    setHerodotusData({ destinationChain, apiKey });
 
-    // Update the login button text to indicate the user is logged in
     loginButton.innerHTML = "🛰️ <strong>Herodotus (Logged In)</strong>";
-
-    // Close the modal
     modal.style.display = "none";
   };
 
@@ -74,7 +92,7 @@ document.getElementById("closeModal")!.onclick = function () {
 
 // Close the modal when the user clicks anywhere outside of the modal
 window.onclick = function (event) {
-  if (event.target == modal) {
+  if (event.target === modal) {
     modal.style.display = "none";
   }
 };
