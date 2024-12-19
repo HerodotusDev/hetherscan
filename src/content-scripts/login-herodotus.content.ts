@@ -6,7 +6,7 @@ import {
 
 const ethPriceElement = document.querySelector("#ethPrice > span");
 let loginButton: HTMLButtonElement;
-let modal: HTMLDivElement;
+let loginModal: HTMLDivElement;
 
 if (!ethPriceElement) throw new Error("Eth price element not found");
 
@@ -16,8 +16,8 @@ loginButton.innerHTML = "🛰️ Log in with Herodotus";
 loginButton.classList.add("btn", "btn-primary");
 loginButton.onclick = function () {
   // Show modal
-  modal.classList.add("show");
-  modal.style.display = "block";
+  loginModal.classList.add("show");
+  loginModal.style.display = "block";
 };
 
 // Create the logout button
@@ -28,8 +28,8 @@ logoutButton.onclick = function () {
   setHerodotusData({ destinationChain: undefined, apiKey: undefined });
   loginButton.innerHTML = "🛰️ Log in with Herodotus";
   logoutButton.remove();
-  modal.classList.remove("show");
-  modal.style.display = "none";
+  loginModal.classList.remove("show");
+  loginModal.style.display = "none";
 };
 
 // Insert login button
@@ -49,10 +49,10 @@ getHerodotusData().then((data) => {
 });
 
 // Create the modal structure using Bootstrap classes
-modal = document.createElement("div");
-modal.classList.add("modal", "fade");
-modal.setAttribute("tabindex", "-1");
-modal.innerHTML = `
+loginModal = document.createElement("div");
+loginModal.classList.add("modal", "fade");
+loginModal.setAttribute("tabindex", "-1");
+loginModal.innerHTML = `
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -78,7 +78,7 @@ modal.innerHTML = `
     </div>
   </div>
 `;
-document.body.appendChild(modal);
+document.body.appendChild(loginModal);
 
 // Retrieve stored data on load and update the UI
 getHerodotusData().then((data) => {
@@ -122,21 +122,21 @@ getHerodotusData().then((data) => {
       );
     }
 
-    modal.classList.remove("show");
-    modal.style.display = "none";
+    loginModal.classList.remove("show");
+    loginModal.style.display = "none";
   };
 
 // Close the modal when the user clicks the close button
 document.getElementById("closeModal")!.onclick = function () {
-  modal.classList.remove("show");
-  modal.style.display = "none";
+  loginModal.classList.remove("show");
+  loginModal.style.display = "none";
 };
 
 // Close the modal when the user clicks outside of it
 window.onclick = function (event) {
-  if (event.target === modal) {
-    modal.classList.remove("show");
-    modal.style.display = "none";
+  if (event.target === loginModal) {
+    loginModal.classList.remove("show");
+    loginModal.style.display = "none";
   }
 };
 

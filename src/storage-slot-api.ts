@@ -4,7 +4,7 @@ export const apiRequestBuilder = {
   getAccountProperties: (ctx: {
     originChainId: string;
     destinationChainId: string;
-    blockNumber: string;
+    blockNumber: number;
     account: string;
     properties: string[];
   }) => {
