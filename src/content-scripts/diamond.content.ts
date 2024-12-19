@@ -3,39 +3,16 @@ console.log("✅ diamond.content.ts");
 const address = window.location.pathname.split("/")[2];
 console.log("✅ address", address);
 
-function getCurrentTab() {
-  // Check hash first
-  const hash = window.location.hash.slice(1);
-  if (hash) return hash;
-
-  // Check URL for tab indicators
-  const url = window.location.href;
-  if (url.includes("readContract")) return "readContract";
-  if (url.includes("writeContract")) return "writeContract";
-  if (url.includes("#code")) return "code";
-
-  return "code"; // default tab
-}
-
-// ✅ Function to handle different routes
-let routeChangeTimer: NodeJS.Timeout | null = null;
-
-function handleRouteChange() {
-  if (routeChangeTimer) {
-    clearTimeout(routeChangeTimer);
-  }
-
-  routeChangeTimer = setTimeout(() => {
-    const currentTab = getCurrentTab();
+function updateCurrentTab() {
+  const currentTab = window.location.hash.slice(1);
+  if (currentTab !== window.herodotus.routeObserver?.currentTab) {
+    window.herodotus.routeObserver!.currentTab = currentTab;
     console.log("🎯 Tab Changed:", currentTab);
-  }, 100);
+  }
 }
 
 function initializeListeners() {
-  const observer = new MutationObserver(() => {
-    console.log("🔍 DOM Mutation Event");
-    handleRouteChange();
-  });
+  const observer = new MutationObserver(updateCurrentTab);
 
   observer.observe(document, {
     childList: true,
@@ -44,9 +21,9 @@ function initializeListeners() {
     characterData: true,
   });
 
+  window.herodotus = window.herodotus || {};
   window.herodotus.routeObserver = observer;
-
-  handleRouteChange();
+  updateCurrentTab();
 }
 
 initializeListeners();
