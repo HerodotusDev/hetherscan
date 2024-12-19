@@ -9,7 +9,7 @@
         "https://sepolia.etherscan.io/address/*"
       ],
       "js": [
-        "content-scripts/diamond.content.js"
+        "src/content-scripts/diamond.content.js"
       ]
     },
     {
@@ -19,7 +19,7 @@
       ],
       "all_frames": true,
       "js": [
-        "content-scripts/proxy-diamond-inject.content.js"
+        "src/content-scripts/proxy-diamond-inject.content.js"
       ]
     },
     {
@@ -27,7 +27,7 @@
         "https://sepolia.etherscan.io/*"
       ],
       "js": [
-        "content-scripts/inject.content.js"
+        "src/content-scripts/tab-tracker.content.js"
       ]
     },
     {
@@ -35,7 +35,7 @@
         "https://sepolia.etherscan.io/*"
       ],
       "js": [
-        "content-scripts/test.content.js"
+        "src/content-scripts/inject.content.js"
       ]
     },
     {
@@ -43,20 +43,30 @@
         "https://sepolia.etherscan.io/*"
       ],
       "js": [
-        "content-scripts/login-herodotus.content.js"
+        "src/content-scripts/login-herodotus.content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://sepolia.etherscan.io/address/*"
+      ],
+      "js": [
+        "src/content-scripts/prove-account.content.js"
       ]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": [
-        "injected.js",
-        "proxy-diamond-inject.js"
+        "src/injected.js",
+        "src/proxy-diamond-inject.js"
       ],
       "matches": [
         "https://sepolia.etherscan.io/*"
       ]
     }
   ],
-  "permissions": []
+  "permissions": [
+    "storage"
+  ]
 }
