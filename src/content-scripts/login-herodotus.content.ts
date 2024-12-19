@@ -50,7 +50,7 @@ modal.innerHTML = `
 document.body.appendChild(modal);
 
 // Retrieve stored data on load and update the UI
-getHerodotusData((data) => {
+getHerodotusData().then((data) => {
   if (data) {
     // Data found, update button and fields
     loginButton.innerHTML = "🛰️ <strong>Herodotus (Logged In)</strong>";

@@ -5,15 +5,16 @@ type HerodotusSingleton = {
 };
 
 // Setter function to save data to Chrome storage
-export function setHerodotusData(data: HerodotusSingleton): void {
-  chrome.storage.local.set({ herodotus: data });
+export async function setHerodotusData(
+  data: HerodotusSingleton
+): Promise<void> {
+  await chrome.storage.local.set({ herodotus: data });
 }
 
 // Modified getter to use a callback
-export function getHerodotusData(
-  callback: (data: HerodotusSingleton | undefined) => void
-): void {
-  chrome.storage.local.get("herodotus", (result) => {
-    callback(result.herodotus);
-  });
+export async function getHerodotusData(): Promise<
+  HerodotusSingleton | undefined
+> {
+  const result = await chrome.storage.local.get("herodotus");
+  return result.herodotus;
 }
