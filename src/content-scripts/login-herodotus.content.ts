@@ -11,11 +11,7 @@ let modal: HTMLDivElement;
 if (!ethPriceElement) throw new Error("Eth price element not found");
 
 loginButton = document.createElement("button");
-loginButton.innerHTML = "🛰️ <strong>Herodotus</strong>";
-loginButton.style.color = "white";
-loginButton.style.border = "none";
-loginButton.style.padding = "10px 20px";
-loginButton.style.cursor = "pointer";
+loginButton.innerHTML = "🛰️ Log in with Herodotus";
 loginButton.classList.add("btn");
 loginButton.classList.add("btn-primary");
 loginButton.onclick = function () {
@@ -25,15 +21,11 @@ loginButton.onclick = function () {
 // Create logout button but don't insert it yet
 const logoutButton = document.createElement("button");
 logoutButton.innerHTML = "Logout";
-logoutButton.style.backgroundColor = "transparent";
-logoutButton.style.color = "blue";
-logoutButton.style.border = "2px solid blue";
-logoutButton.style.padding = "10px 20px";
-logoutButton.style.cursor = "pointer";
-logoutButton.style.marginLeft = "10px";
+logoutButton.classList.add("btn");
+logoutButton.classList.add("btn-secondary");
 logoutButton.onclick = function () {
   setHerodotusData({ destinationChain: undefined, apiKey: undefined });
-  loginButton.innerHTML = "🛰️ <strong>Herodotus</strong>";
+  loginButton.innerHTML = "🛰️ Log in with Herodotus";
   logoutButton.remove(); // Remove logout button when logging out
   modal.style.display = "none";
 };
@@ -86,7 +78,7 @@ document.body.appendChild(modal);
 getHerodotusData().then((data) => {
   if (data.apiKey) {
     // Data found, update button and fields
-    loginButton.innerHTML = "🛰️ <strong>Herodotus (Logged In)</strong>";
+    loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
 
     const destinationChainSelect = document.getElementById(
       "destinationChain"
@@ -114,7 +106,7 @@ getHerodotusData().then((data) => {
 
     setHerodotusData({ destinationChain, apiKey });
 
-    loginButton.innerHTML = "🛰️ <strong>Herodotus (Logged In)</strong>";
+    loginButton.innerHTML = "🛰️ Herodotus Logged In";
 
     // Add logout button after successful login
     ethPriceElement.parentNode!.insertBefore(
@@ -151,7 +143,7 @@ if (footerMenu) {
   clearDataLink.addEventListener("click", (e) => {
     e.preventDefault();
     deleteHerodotusData();
-    loginButton.innerHTML = "🛰️ <strong>Herodotus</strong>";
+    loginButton.innerHTML = "🛰️ Log in with Herodotus";
     logoutButton.remove();
   });
 

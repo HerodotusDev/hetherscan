@@ -33,8 +33,18 @@ function createNewButton(id: string) {
 if (ethBalanceElement) {
   // create a new button element
   const newButton = createNewButton("proveEthBalance");
-  // insert the new button right after the ethBalanceElement
-  ethBalanceElement.insertAdjacentElement("afterend", newButton);
+  newButton.classList.add("ms-2");
+
+  // Find the balance amount div (the one with the ethereum icon)
+  const balanceDiv = ethBalanceElement
+    .closest("div")
+    .querySelector("div > div");
+  if (balanceDiv) {
+    balanceDiv.style.display = "flex";
+    balanceDiv.style.alignItems = "center";
+    // insert the new button next to the balance amount
+    balanceDiv.appendChild(newButton);
+  }
 }
 
 // // Function to create and insert the prove button
