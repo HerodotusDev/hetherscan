@@ -33,8 +33,8 @@ function createNewButton(id: string) {
 if (ethBalanceElement) {
   // create a new button element
   const newButton = createNewButton("proveEthBalance");
-  // insert the new button right after the ethBalanceElement
-  ethBalanceElement.insertAdjacentElement("afterend", newButton);
+  // insert the new button as the last element of the container
+  ethBalanceElement.parentElement.appendChild(newButton);
 }
 
 // // Function to create and insert the prove button
