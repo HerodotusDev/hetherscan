@@ -64,8 +64,25 @@ window.addEventListener("message", async (event) => {
     }
   }
 };
+function fixTabElements() {
+  document.querySelectorAll(".nav-subtabs li a").forEach((tab) => {
+    if (!bootstrap.Tab.getInstance(tab)) {
+      new bootstrap.Tab(tab);
+    }
+  });
+}
+fixTabElements();
+
+$(document).ready(function () {
+  const hash = window.location.hash;
+  setTimeout(() => {
+    if (hash == "#readDiamond" || hash == "#writeDiamond") {
+      activaTab(hash.slice(1));
+    }
+  }, 0);
+});
+
 (window as any).activaTab = function (tab) {
-  console.log("activaTab", tab);
   var subtab = "0";
   let fNumber;
   if (tab.lastIndexOf("#") > -1) {
@@ -171,17 +188,13 @@ window.addEventListener("message", async (event) => {
   var obj7 = document.getElementById(
     "ContentPlaceHolder1_li_multipleProxyContract"
   );
+  var obj8 = document.getElementById("ContentPlaceHolder1_li_readDiamond");
+  var obj9 = document.getElementById("ContentPlaceHolder1_li_writeDiamond");
   document.getElementById("divClientMultiSearch").style.display = "none";
-  console.log("subtab", subtab);
   if (subtab === "0") {
     if (tab.indexOf("analytics") >= 0) {
       //Do nothing.
     } else {
-      console.log("tab", tab);
-      console.log(
-        "query selectors are ",
-        document.querySelectorAll(".nav_tabs1 li")
-      );
       bootstrap.Tab.getInstance(
         document.querySelector('.nav_tabs1 li a[data-bs-target="#' + tab + '"]')
       ).show();
@@ -193,7 +206,9 @@ window.addEventListener("message", async (event) => {
       obj4 === null &&
       obj5 === null &&
       obj6 === null &&
-      obj7 === null
+      obj7 === null &&
+      obj8 === null &&
+      obj9 === null
     ) {
       document.getElementById("nav_subtabs").style.display = "none";
       $("#code").attr("style", "display:visible;");
@@ -227,7 +242,9 @@ window.addEventListener("message", async (event) => {
       obj4 === null &&
       obj5 === null &&
       obj6 === null &&
-      obj7 === null
+      obj7 === null &&
+      obj8 === null &&
+      obj9 === null
     ) {
       document.getElementById("nav_subtabs").style.display = "none";
       $("#nav_subtabs").parent().removeClass("d-md-flex");
