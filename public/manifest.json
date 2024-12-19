@@ -5,14 +5,22 @@
   "description": "Grants etherscan more functionality, including full diamond standard support & Herodotus proving services",
   "content_scripts": [
     {
-      "matches": ["https://etherscan.io/*", "https://sepolia.etherscan.io/*"],
-      "js": ["contentScript.js"]
+      "matches": ["https://sepolia.etherscan.io/address/*"],
+      "js": ["content-scripts/diamond.content.js"]
+    },
+    {
+      "matches": ["https://sepolia.etherscan.io/*"],
+      "js": ["content-scripts/inject.content.js"]
+    },
+    {
+      "matches": ["https://sepolia.etherscan.io/*"],
+      "js": ["content-scripts/test.content.js"]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": ["injected.js"],
-      "matches": ["https://etherscan.io/*", "https://sepolia.etherscan.io/*"]
+      "matches": ["https://sepolia.etherscan.io/*"]
     }
   ],
   "permissions": []

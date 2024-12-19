@@ -7,10 +7,26 @@ const srcDir = join(__dirname, "src");
 const publicDir = join(__dirname, "public");
 const distDir = join(__dirname, "dist");
 
+function getAllFiles(dir: string, fileList: string[] = []): string[] {
+  const files = readdirSync(dir, { withFileTypes: true });
+
+  files.forEach((file) => {
+    const filePath = join(dir, file.name);
+    if (file.isDirectory()) {
+      getAllFiles(filePath, fileList);
+    } else {
+      fileList.push(filePath);
+    }
+  });
+
+  return fileList;
+}
+
 async function build() {
-  const entrypoints = readdirSync(srcDir)
-    .filter((file) => file.endsWith(".ts") && !file.endsWith(".d.ts"))
-    .map((file) => join(srcDir, file));
+  const allSrcFiles = getAllFiles(srcDir);
+  const entrypoints = allSrcFiles.filter(
+    (file) => file.endsWith(".ts") && !file.endsWith(".d.ts")
+  );
 
   await Bun.build({
     entrypoints,

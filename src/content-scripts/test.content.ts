@@ -1,13 +1,5 @@
 import axios from "axios";
 
-// Inject the `injected.js` script into the page
-(function injectScript() {
-  const script = document.createElement("script");
-  script.src = chrome.runtime.getURL("injected.js");
-  script.onload = () => script.remove();
-  (document.head || document.documentElement).appendChild(script);
-})();
-
 // Add a container for our buttons and info
 const container = document.createElement("div");
 container.style.position = "absolute";
