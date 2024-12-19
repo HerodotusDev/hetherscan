@@ -57,7 +57,7 @@ modal.innerHTML = `
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Herodotus Settings</h5>
-        <button type="button" class="btn-close btn-close-white" aria-label="Close" id="closeModal"></button>
+        <button type="button" class="btn-close" aria-label="Close" id="closeModal"></button>
       </div>
       <div class="modal-body">
         <div class="mb-3">
