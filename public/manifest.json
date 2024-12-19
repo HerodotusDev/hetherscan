@@ -35,6 +35,14 @@
       "js": [
         "content-scripts/login-herodotus.content.js"
       ]
+    },
+    {
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/prove.content.js"
+      ]
     }
   ],
   "web_accessible_resources": [
