@@ -23,8 +23,9 @@ if (nonceElement) {
 function createNewButton(id: string) {
   const newButton = document.createElement("button");
   newButton.textContent = "🛰️ Prove";
-  newButton.style.backgroundColor = "blue";
-  newButton.style.color = "white";
+  newButton.classList.add("btn");
+  newButton.classList.add("btn-sm");
+  newButton.classList.add("btn-primary");
   newButton.id = id;
   return newButton;
 }

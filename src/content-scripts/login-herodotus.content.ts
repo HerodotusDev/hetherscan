@@ -77,7 +77,7 @@ modal.innerHTML = `
         <label for="apiKey">API Key:</label>
         <input type="text" id="apiKey" name="apiKey" style="background-color: #555555; color: #ffffff;">
         <br><br>
-        <button id="submitButton" style="background-color: blue; color: white; border: none; padding: 10px 20px; cursor: pointer;">Submit</button>
+        <button id="submitButton" class="btn btn-primary">Submit</button>
     </div>
 `;
 document.body.appendChild(modal);
