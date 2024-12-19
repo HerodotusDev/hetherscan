@@ -5,31 +5,65 @@
   "description": "Grants etherscan more functionality, including full diamond standard support & Herodotus proving services",
   "content_scripts": [
     {
-      "matches": ["https://sepolia.etherscan.io/address/*"],
-      "js": ["content-scripts/diamond.content.js"]
+      "matches": [
+        "https://sepolia.etherscan.io/address/*"
+      ],
+      "js": [
+        "content-scripts/diamond.content.js"
+      ]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["content-scripts/tab-tracker.content.js"]
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/tab-tracker.content.js"
+      ]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["content-scripts/inject.content.js"]
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/inject.content.js"
+      ]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["content-scripts/test.content.js"]
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/login-herodotus.content.js"
+      ]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["content-scripts/login-herodotus.content.js"]
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/prove.content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/test.content.js"
+      ]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["injected.js"],
-      "matches": ["https://sepolia.etherscan.io/*"]
+      "resources": [
+        "injected.js"
+      ],
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ]
     }
   ],
-  "permissions": ["storage"]
+  "permissions": [
+    "storage"
+  ]
 }
