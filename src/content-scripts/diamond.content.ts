@@ -44,7 +44,7 @@ function initializeListeners() {
     characterData: true,
   });
 
-  window.routeObserver = observer;
+  window.herodotus.routeObserver = observer;
 
   handleRouteChange();
 }

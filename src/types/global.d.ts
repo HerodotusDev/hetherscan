@@ -1,7 +1,7 @@
 interface Window {
-  routeObserver?: MutationObserver & { lastUrl?: string };
   herodotus: {
     destinationChain?: string;
     apiKey?: string;
+    routeObserver?: MutationObserver & { lastUrl?: string };
   };
 }
