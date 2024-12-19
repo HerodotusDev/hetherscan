@@ -10,23 +10,25 @@ let modal: HTMLDivElement;
 
 if (!ethPriceElement) throw new Error("Eth price element not found");
 
+// Create the login button
 loginButton = document.createElement("button");
 loginButton.innerHTML = "🛰️ Log in with Herodotus";
-loginButton.classList.add("btn");
-loginButton.classList.add("btn-primary");
+loginButton.classList.add("btn", "btn-primary");
 loginButton.onclick = function () {
+  // Show modal
+  modal.classList.add("show");
   modal.style.display = "block";
 };
 
-// Create logout button but don't insert it yet
+// Create the logout button
 const logoutButton = document.createElement("button");
 logoutButton.innerHTML = "Logout";
-logoutButton.classList.add("btn");
-logoutButton.classList.add("btn-secondary");
+logoutButton.classList.add("btn", "btn-outline-primary", "ms-2"); // margin-start for spacing
 logoutButton.onclick = function () {
   setHerodotusData({ destinationChain: undefined, apiKey: undefined });
   loginButton.innerHTML = "🛰️ Log in with Herodotus";
-  logoutButton.remove(); // Remove logout button when logging out
+  logoutButton.remove();
+  modal.classList.remove("show");
   modal.style.display = "none";
 };
 
@@ -38,7 +40,7 @@ ethPriceElement.parentNode!.insertBefore(
 
 // Only show logout button when logged in
 getHerodotusData().then((data) => {
-  if (data.apiKey) {
+  if (data?.apiKey) {
     ethPriceElement.parentNode!.insertBefore(
       logoutButton,
       loginButton.nextSibling
@@ -46,37 +48,41 @@ getHerodotusData().then((data) => {
   }
 });
 
-// Create the modal
+// Create the modal structure using Bootstrap classes
 modal = document.createElement("div");
-modal.style.display = "none";
-modal.style.position = "fixed";
-modal.style.zIndex = "1";
-modal.style.left = "0";
-modal.style.top = "0";
-modal.style.width = "100%";
-modal.style.height = "100%";
-modal.style.overflow = "auto";
-modal.style.backgroundColor = "rgba(0,0,0,0.4)";
+modal.classList.add("modal", "fade");
+modal.setAttribute("tabindex", "-1");
 modal.innerHTML = `
-    <div style="background-color: #333333; color: #ffffff; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 80%;">
-        <span style="color: #ffffff; float: right; font-size: 28px; font-weight: bold; cursor: pointer;" id="closeModal">&times;</span>
-        <label for="destinationChain">Destination Chain:</label>
-        <select id="destinationChain" name="destinationChain" style="background-color: #555555; color: #ffffff;">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Herodotus Settings</h5>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close" id="closeModal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="destinationChain" class="form-label">Destination Chain:</label>
+          <select id="destinationChain" name="destinationChain" class="form-select bg-secondary text-white">
             <option value="11155111">11155111</option>
             <option value="SN_Sepolia">SN_Sepolia</option>
-        </select>
-        <br><br>
-        <label for="apiKey">API Key:</label>
-        <input type="text" id="apiKey" name="apiKey" style="background-color: #555555; color: #ffffff;">
-        <br><br>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="apiKey" class="form-label">API Key:</label>
+          <input type="text" id="apiKey" name="apiKey" class="form-control bg-secondary text-white">
+        </div>
+      </div>
+      <div class="modal-footer">
         <button id="submitButton" class="btn btn-primary">Submit</button>
+      </div>
     </div>
+  </div>
 `;
 document.body.appendChild(modal);
 
 // Retrieve stored data on load and update the UI
 getHerodotusData().then((data) => {
-  if (data.apiKey) {
+  if (data?.apiKey) {
     // Data found, update button and fields
     loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
 
@@ -108,33 +114,37 @@ getHerodotusData().then((data) => {
 
     loginButton.innerHTML = "🛰️ Herodotus Logged In";
 
-    // Add logout button after successful login
-    ethPriceElement.parentNode!.insertBefore(
-      logoutButton,
-      loginButton.nextSibling
-    );
+    // Add logout button if not present
+    if (!logoutButton.parentNode) {
+      ethPriceElement.parentNode!.insertBefore(
+        logoutButton,
+        loginButton.nextSibling
+      );
+    }
 
+    modal.classList.remove("show");
     modal.style.display = "none";
   };
 
-// Close the modal when the user clicks on <span> (x)
+// Close the modal when the user clicks the close button
 document.getElementById("closeModal")!.onclick = function () {
+  modal.classList.remove("show");
   modal.style.display = "none";
 };
 
-// Close the modal when the user clicks anywhere outside of the modal
+// Close the modal when the user clicks outside of it
 window.onclick = function (event) {
   if (event.target === modal) {
+    modal.classList.remove("show");
     modal.style.display = "none";
   }
 };
 
-// Add Clear Herodotus Data to footer
+// Add "Clear Herodotus Data" link to footer if present
 const footerMenu = document.querySelector(
   ".d-flex.flex-wrap.justify-content-md-end.gap-2"
 );
 if (footerMenu) {
-  // Create the link
   const clearDataLink = document.createElement("a");
   clearDataLink.className = "link-dark";
   clearDataLink.href = "#";
@@ -144,15 +154,15 @@ if (footerMenu) {
     e.preventDefault();
     deleteHerodotusData();
     loginButton.innerHTML = "🛰️ Log in with Herodotus";
-    logoutButton.remove();
+    if (logoutButton.parentNode) {
+      logoutButton.remove();
+    }
   });
 
-  // Create the separator
   const separator = document.createElement("span");
   separator.className = "text-secondary d-none d-sm-block";
   separator.textContent = "|";
 
-  // Insert both elements at the start
   footerMenu.insertBefore(separator, footerMenu.firstChild);
   footerMenu.insertBefore(clearDataLink, footerMenu.firstChild);
 }
