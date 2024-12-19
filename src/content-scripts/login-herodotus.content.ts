@@ -1,12 +1,3 @@
-declare global {
-  interface Window {
-    herodotus: {
-      destinationChain?: string;
-      apiKey?: string;
-    };
-  }
-}
-
 const ethPriceElement = document.querySelector("#ethPrice > span");
 let loginButton: HTMLButtonElement;
 

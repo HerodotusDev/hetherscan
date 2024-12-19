@@ -50,9 +50,3 @@ function initializeListeners() {
 }
 
 initializeListeners();
-
-declare global {
-  interface Window {
-    routeObserver?: MutationObserver & { lastUrl?: string };
-  }
-}
