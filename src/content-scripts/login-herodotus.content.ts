@@ -54,7 +54,7 @@ modal.classList.add("modal", "fade");
 modal.setAttribute("tabindex", "-1");
 modal.innerHTML = `
   <div class="modal-dialog">
-    <div class="modal-content bg-dark text-white">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Herodotus Settings</h5>
         <button type="button" class="btn-close btn-close-white" aria-label="Close" id="closeModal"></button>
@@ -62,14 +62,14 @@ modal.innerHTML = `
       <div class="modal-body">
         <div class="mb-3">
           <label for="destinationChain" class="form-label">Destination Chain:</label>
-          <select id="destinationChain" name="destinationChain" class="form-select bg-secondary text-white">
+          <select id="destinationChain" name="destinationChain" class="form-select">
             <option value="11155111">11155111</option>
             <option value="SN_Sepolia">SN_Sepolia</option>
           </select>
         </div>
         <div class="mb-3">
           <label for="apiKey" class="form-label">API Key:</label>
-          <input type="text" id="apiKey" name="apiKey" class="form-control bg-secondary text-white">
+          <input type="text" id="apiKey" name="apiKey" class="form-control">
         </div>
       </div>
       <div class="modal-footer">
