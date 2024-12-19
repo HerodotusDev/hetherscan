@@ -17,7 +17,7 @@
         "https://sepolia.etherscan.io/*"
       ],
       "js": [
-        "content-scripts/inject.content.js"
+        "content-scripts/tab-tracker.content.js"
       ]
     },
     {
@@ -25,7 +25,7 @@
         "https://sepolia.etherscan.io/*"
       ],
       "js": [
-        "content-scripts/test.content.js"
+        "content-scripts/inject.content.js"
       ]
     },
     {
@@ -42,6 +42,14 @@
       ],
       "js": [
         "content-scripts/prove.content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://sepolia.etherscan.io/*"
+      ],
+      "js": [
+        "content-scripts/test.content.js"
       ]
     }
   ],
