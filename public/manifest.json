@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "hetherscan",
+  "version": "1.0.0",
+  "description": "Grants etherscan more functionality, including full diamond standard support & Herodotus proving services",
+  "content_scripts": [
+    {
+      "matches": ["https://etherscan.io/*", "https://sepolia.etherscan.io/*"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["https://etherscan.io/*", "https://sepolia.etherscan.io/*"]
+    }
+  ],
+  "permissions": []
+}

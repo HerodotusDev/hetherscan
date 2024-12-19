@@ -1,0 +1,19 @@
+{
+  "name": "hetherscan",
+  "module": "build.ts",
+  "type": "module",
+  "scripts": {
+    "build": "bun build.ts",
+    "dev": "bun build.ts --watch"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.287",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.7.9"
+  }
+}
