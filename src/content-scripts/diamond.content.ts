@@ -1,5 +1,6 @@
 import { createPublicClient, http, parseAbi } from "viem";
 import { sepolia } from "viem/chains";
+import { getHerodotusData, setHerodotusData } from "../misc";
 
 async function renderDiamondUI() {
   const address = window.location.pathname.split("/")[2];
@@ -28,11 +29,29 @@ async function renderDiamondUI() {
               placeholder="Enter function name">
           </div>
           <div class="d-flex align-items-end">
-            <button class="btn btn-primary" id="get-all-diamond-sub-addresses-button">Get</button>
+            <button class="btn btn-primary" id="get-all-diamond-sub-addresses-button">Load</button>
           </div>
         </div>
       </div>`
     );
+
+    // Load saved configuration for this address
+    const herodotusData = await getHerodotusData();
+    const savedConfig = herodotusData?.contractConfigs?.[address];
+
+    if (savedConfig) {
+      const selectorInput = document.getElementById(
+        "get-all-diamond-sub-addresses-selector"
+      ) as HTMLInputElement;
+      const nameInput = document.getElementById(
+        "get-all-diamond-sub-addresses-name"
+      ) as HTMLInputElement;
+
+      if (selectorInput && nameInput) {
+        selectorInput.value = savedConfig.functionSelector;
+        nameInput.value = savedConfig.functionName;
+      }
+    }
   }
 
   // Add click event listener for the button
@@ -67,6 +86,13 @@ async function renderDiamondUI() {
           abi: parseAbi([functionSelector]),
           functionName: functionName,
         });
+
+        const { contractConfigs } = await getHerodotusData();
+        contractConfigs[address] = {
+          functionSelector,
+          functionName,
+        };
+        await setHerodotusData({ contractConfigs });
 
         window.herodotus.diamond = window.herodotus.diamond || {};
         window.herodotus.diamond.moduleAddresses = modules;

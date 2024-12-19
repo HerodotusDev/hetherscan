@@ -1,20 +1,34 @@
+type ContractConfig = {
+  functionSelector: string;
+  functionName: string;
+};
+type ContractAddress = string;
+
 type HerodotusSingleton = {
-  destinationChain: string;
-  apiKey: string;
-  // Add other properties as needed
+  destinationChain: string | undefined;
+  apiKey: string | undefined;
+  contractConfigs: Record<ContractAddress, ContractConfig>;
 };
 
-// Setter function to save data to Chrome storage
+const defaultHerodotusData: HerodotusSingleton = {
+  destinationChain: undefined,
+  apiKey: undefined,
+  contractConfigs: {},
+};
+
 export async function setHerodotusData(
-  data: HerodotusSingleton
+  data: Partial<HerodotusSingleton>
 ): Promise<void> {
-  await chrome.storage.local.set({ herodotus: data });
+  const currentData = await getHerodotusData();
+  const updatedData = { ...currentData, ...data };
+  await chrome.storage.local.set({ herodotus: updatedData });
 }
 
-// Modified getter to use a callback
-export async function getHerodotusData(): Promise<
-  HerodotusSingleton | undefined
-> {
+export async function getHerodotusData(): Promise<HerodotusSingleton> {
   const result = await chrome.storage.local.get("herodotus");
-  return result.herodotus;
+  return result.herodotus || defaultHerodotusData;
+}
+
+export async function deleteHerodotusData(): Promise<void> {
+  await chrome.storage.local.remove("herodotus");
 }
