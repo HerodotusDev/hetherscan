@@ -40,6 +40,7 @@ window.addEventListener("message", async (event) => {
 (window as any).loadIframeSourceDiamondRead = function (fLine) {
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
+    // TODO: here is a link that is placed inside an iframe
     const link =
       "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
     if (fLine) {
@@ -54,6 +55,7 @@ window.addEventListener("message", async (event) => {
 (window as any).loadIframeSourceDiamondWrite = function (fLine) {
   if (window.writeDiamondContractLoaded == false) {
     window.writeDiamondContractLoaded = true;
+    // TODO: here is a link that is placed inside an iframe
     const link =
       "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
     if (fLine) {
