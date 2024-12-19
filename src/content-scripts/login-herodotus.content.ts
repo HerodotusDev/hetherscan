@@ -12,11 +12,12 @@ if (!ethPriceElement) throw new Error("Eth price element not found");
 
 loginButton = document.createElement("button");
 loginButton.innerHTML = "🛰️ <strong>Herodotus</strong>";
-loginButton.style.backgroundColor = "blue";
 loginButton.style.color = "white";
 loginButton.style.border = "none";
 loginButton.style.padding = "10px 20px";
 loginButton.style.cursor = "pointer";
+loginButton.classList.add("btn");
+loginButton.classList.add("btn-primary");
 loginButton.onclick = function () {
   modal.style.display = "block";
 };
