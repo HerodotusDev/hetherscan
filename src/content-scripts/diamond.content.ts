@@ -78,26 +78,28 @@ async function renderDiamondUI() {
   if (overviewElement) {
     overviewElement.insertAdjacentHTML(
       "beforeend",
-      `<div id="diamond-config">
-        <h4 class="text-cap mb-1">Diamond Config</h4>
-        <div class="mb-2">
-          <label class="text-cap opacity-75" style="font-size: 0.6rem;">Enter function selector</label>
-          <input type="text" class="form-control" id="get-all-diamond-sub-addresses-selector" 
-            value="function facetAddresses() external view returns (address[] memory facetAddresses_)"
-            placeholder="Enter function selector">
-        </div>
-        <div class="d-flex gap-2">
-          <div class="flex-grow-1">
-            <label class="text-cap opacity-75" style="font-size: 0.6rem;">Enter function name</label>
-            <input type="text" class="form-control" id="get-all-diamond-sub-addresses-name" 
-              value="facetAddresses"
-              placeholder="Enter function name">
+      `<details id="diamond-config">
+        <summary class="text-cap mb-1">Diamond Config</summary>
+        <div class="mt-2">
+          <div class="mb-2">
+            <label class="text-cap opacity-75" style="font-size: 0.6rem;">Enter function selector</label>
+            <input type="text" class="form-control" id="get-all-diamond-sub-addresses-selector" 
+              value="function facetAddresses() external view returns (address[] memory facetAddresses_)"
+              placeholder="Enter function selector">
           </div>
-          <div class="d-flex align-items-end">
-            <button class="btn btn-primary" id="get-all-diamond-sub-addresses-button">Load</button>
+          <div class="d-flex gap-2">
+            <div class="flex-grow-1">
+              <label class="text-cap opacity-75" style="font-size: 0.6rem;">Enter function name</label>
+              <input type="text" class="form-control" id="get-all-diamond-sub-addresses-name" 
+                value="facetAddresses"
+                placeholder="Enter function name">
+            </div>
+            <div class="d-flex align-items-end">
+              <button class="btn btn-primary" id="get-all-diamond-sub-addresses-button">Load</button>
+            </div>
           </div>
         </div>
-      </div>`
+      </details>`
     );
 
     // Load saved configuration for this address
