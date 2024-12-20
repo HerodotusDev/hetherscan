@@ -1,12 +1,17 @@
 import axios from "axios";
 import { getHerodotusData } from "../misc";
-import { apiRequestBuilder } from "../storage-slot-api";
+import { accountProperties, apiRequestBuilder } from "../storage-slot-api";
+import { createNewModal, generateCheckboxes } from "../modal";
 
 // ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
 // ░█░█░█░█░█░█░█▀█░█░░░▀▀█
 // ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
 
-const createNewModal = (ctx: { id: string; inner: string; title: string }) => {
+const createNewModalLocal = (ctx: {
+  id: string;
+  inner: string;
+  title: string;
+}) => {
   let newModal = document.createElement("div");
   newModal = document.createElement("div");
   newModal.classList.add("modal", "fade");
@@ -36,7 +41,7 @@ const createNewModal = (ctx: { id: string; inner: string; title: string }) => {
   return newModal;
 };
 
-let proveAccountModal: HTMLDivElement = createNewModal({
+let proveAccountModal: HTMLDivElement = createNewModalLocal({
   id: "proveAccountModal",
   inner: `
   
@@ -50,7 +55,7 @@ let proveAccountModal: HTMLDivElement = createNewModal({
         </form>
 
   `,
-  title: "Prove Account",
+  title: "Prove Balance",
 });
 
 document.body.appendChild(proveAccountModal);
@@ -115,7 +120,7 @@ window.onclick = function (event) {
   }
 };
 
-async function proveEthBalanceButtonClickHandler() {
+async function proveEthBalanceClickHandler() {
   proveAccountModal.classList.add("show");
   proveAccountModal.style.display = "block";
 
@@ -126,6 +131,108 @@ async function proveEthBalanceButtonClickHandler() {
   // make default block number the latest block
   const latestBlock = await getLatestBlock();
   blockNumberInput.value = (latestBlock! - 50).toString();
+}
+
+// MODAL FOR ALL PROPERTIES
+
+const proveAllModalPropertiesId = "proveAllModalProperties";
+
+let proveAllModalProperties: HTMLDivElement = createNewModal({
+  id: proveAllModalPropertiesId,
+  title: "Prove Account Properties",
+  inner: `
+      <form id="proveAccountForm">
+          <div class="modal-body">
+              <div class="form-group">
+              <label for="blockNumberAllProperties">Block Number:</label>
+                  <input type="number" id="blockNumberAllProperties" name="blockNumber" class="form-control" required placeholder="e.g. 100000" />
+              </div>
+          </div>
+              ${generateCheckboxes(accountProperties)}
+      </form>
+    `,
+});
+
+async function proveAllPropertiesClickHandler() {
+  proveAllModalProperties.classList.add("show");
+  proveAllModalProperties.style.display = "block";
+
+  const blockNumberInput = document.getElementById(
+    "blockNumberAllProperties"
+  ) as HTMLInputElement;
+
+  // make default block number the latest block
+  const latestBlock = await getLatestBlock();
+  blockNumberInput.value = (latestBlock! - 50).toString();
+}
+
+document.body.appendChild(proveAllModalProperties);
+
+document.getElementById(`close${proveAllModalPropertiesId}`)!.onclick =
+  function () {
+    proveAllModalProperties.classList.remove("show");
+    proveAllModalProperties.style.display = "none";
+  };
+
+document.getElementById(`submit${proveAllModalPropertiesId}`)!.onclick =
+  onProveAllAccountPropertiesSubmit;
+
+window.onclick = function (event) {
+  if (event.target === proveAllModalProperties) {
+    proveAllModalProperties.classList.remove("show");
+    proveAllModalProperties.style.display = "none";
+  }
+};
+
+async function onProveAllAccountPropertiesSubmit() {
+  const blockNumberInput = document.getElementById(
+    "blockNumberAllProperties"
+  ) as HTMLInputElement;
+  const blockNumber = parseInt(blockNumberInput.value, 10);
+
+  const checkboxes = document.querySelectorAll(
+    `#${proveAllModalPropertiesId} input[type="checkbox"]`
+  );
+
+  const allCheckedValues = Array.from(checkboxes)
+    .filter((checkbox) => (checkbox as HTMLInputElement).checked)
+    .map((checkbox) => (checkbox as HTMLInputElement).value);
+
+  if (allCheckedValues.length === 0) {
+    alert("Please select at least one property to prove.");
+    return;
+  }
+
+  const localData = await getHerodotusData();
+  if (!localData || !localData.destinationChain) {
+    alert(
+      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
+    );
+    return;
+  }
+
+  const data = apiRequestBuilder.getAccountProperties({
+    account: address,
+    blockNumber: blockNumber,
+    destinationChainId: localData.destinationChain,
+    originChainId: "11155111",
+    properties: allCheckedValues,
+  });
+
+  const result = await axios.post(
+    "https://staging.api.herodotus.cloud/submit-batch-query",
+    data,
+    {
+      headers: {
+        "api-key": localData.apiKey,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  alert(
+    `Prove account request submitted. Check the status here: https://staging.dashboard.herodotus.dev/explorer/query/${result.data.internalId}`
+  );
 }
 
 // ░█▄█░▀█▀░█▀▀░█▀▀
@@ -146,7 +253,7 @@ async function getLatestBlock() {
     const latestBlockNumber = parseInt(response.data.result, 16);
     return latestBlockNumber;
   } catch (error) {
-    console.error("Error fetching latest block:", error.message);
+    console.error("Error fetching latest block:", error);
   }
 }
 
@@ -158,12 +265,33 @@ const address = window.location.pathname.split("/")[2];
 const ethBalanceElement = [...document.querySelectorAll("*")].find(
   (el) => el.textContent.trim() === "ETH Balance"
 );
-function createNewButton(id: string) {
+
+const mainAddressElement = document.querySelector("#mainaddress");
+
+function createNewButton(id: string, text: string = "🛰️ Prove") {
   const newButton = document.createElement("button");
-  newButton.textContent = "🛰️ Prove";
+  newButton.textContent = text;
   newButton.classList.add("btn", "btn-sm", "btn-primary");
   newButton.id = id;
   return newButton;
+}
+
+if (mainAddressElement) {
+  const newButton = createNewButton(
+    "proveAllProperties",
+    "🛰️ Prove Account Properties"
+  );
+  newButton.classList.add("ms-2");
+
+  newButton.classList.add("ms-2");
+  mainAddressElement.parentNode!.insertBefore(
+    newButton,
+    mainAddressElement.nextSibling
+  );
+
+  document
+    .getElementById("proveAllProperties")
+    ?.addEventListener("click", proveAllPropertiesClickHandler);
 }
 
 if (ethBalanceElement) {
@@ -182,5 +310,5 @@ if (ethBalanceElement) {
   // Add event listener to the prove button after it is created
   document
     .getElementById("proveEthBalance")
-    ?.addEventListener("click", proveEthBalanceButtonClickHandler);
+    ?.addEventListener("click", proveEthBalanceClickHandler);
 }
