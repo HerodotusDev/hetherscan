@@ -51,7 +51,7 @@
         "https://sepolia.etherscan.io/address/*"
       ],
       "js": [
-        "src/content-scripts/prove-account.content.js"
+        "src/content-scripts/account-superset.content.js"
       ]
     },
     {
@@ -59,7 +59,16 @@
         "https://sepolia.etherscan.io/block/*"
       ],
       "js": [
-        "src/content-scripts/prove-block.content.js"
+        "src/content-scripts/prove-block.content.js",
+        "src/content-scripts/block-superset.content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://sepolia.etherscan.io/tx/*"
+      ],
+      "js": [
+        "src/content-scripts/transaction-superset.content.js"
       ]
     }
   ],
