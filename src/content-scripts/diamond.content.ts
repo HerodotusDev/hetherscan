@@ -185,9 +185,6 @@ document.addEventListener(
   ((event: CustomEvent<{ modules: string[] }>) => console.log("💎 Diamond loaded:", event.detail.modules)) as EventListener,
 );
 
-document.addEventListener(
-  "htabchange" as keyof DocumentEventMap,
-  ((_: CustomEvent<{ currentTab: string }>) => {
-    renderDiamondUI();
-  }) as EventListener,
-);
+window.onload = () => {
+  renderDiamondUI();
+};
