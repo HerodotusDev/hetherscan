@@ -8,12 +8,14 @@ type HerodotusSingleton = {
   destinationChain: string | undefined;
   apiKey: string | undefined;
   contractConfigs: Record<ContractAddress, ContractConfig>;
+  sentQueries: string[] | undefined;
 };
 
 const defaultHerodotusData: HerodotusSingleton = {
   destinationChain: undefined,
   apiKey: undefined,
   contractConfigs: {},
+  sentQueries: [],
 };
 
 export async function setHerodotusData(

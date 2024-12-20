@@ -1,4 +1,10 @@
-const HEDODOTUS_ULR = "https://staging.api.herodotus.cloud";
+export const HEDODOTUS_URL = "https://staging.api.herodotus.cloud";
+
+export const DASHBOARD_URL =
+  "https://staging.dashboard.herodotus.dev/explorer/query";
+export const getDashboardUrl = (internalId: string) => {
+  return `${DASHBOARD_URL}/${internalId}`;
+};
 
 export const apiRequestBuilder = {
   getAccountProperties: (ctx: {

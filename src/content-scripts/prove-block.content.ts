@@ -3,8 +3,13 @@
 // ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
 
 import axios from "axios";
-import { getHerodotusData } from "../misc";
-import { apiRequestBuilder, headerProperties } from "../storage-slot-api";
+import { getHerodotusData, setHerodotusData } from "../misc";
+import {
+  apiRequestBuilder,
+  getDashboardUrl,
+  headerProperties,
+  HEDODOTUS_URL,
+} from "../storage-slot-api";
 import { createNewModal, generateCheckboxes } from "../modal";
 
 async function onProveBlockModalSubmit() {
@@ -36,19 +41,17 @@ async function onProveBlockModalSubmit() {
     properties: allCheckedValues,
   });
 
-  const result = await axios.post(
-    "https://staging.api.herodotus.cloud/submit-batch-query",
-    data,
-    {
-      headers: {
-        "api-key": localData.apiKey,
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  const result = await axios.post(`${HEDODOTUS_URL}/submit-batch-query`, data, {
+    headers: {
+      "api-key": localData.apiKey,
+      "Content-Type": "application/json",
+    },
+  });
 
   alert(
-    `Prove account request submitted. Check the status here: https://staging.dashboard.herodotus.dev/explorer/query/${result.data.internalId}`
+    `Prove account request submitted. Check the status here: ${getDashboardUrl(
+      result.data.internalId
+    )}`
   );
 }
 
