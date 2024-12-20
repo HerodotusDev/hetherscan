@@ -17,6 +17,7 @@ export const apiRequestBuilder = {
             accounts: {
               [ctx.account]: {
                 props: ctx.properties,
+                slots: [],
               },
             },
           },

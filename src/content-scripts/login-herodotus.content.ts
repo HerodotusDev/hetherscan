@@ -57,7 +57,7 @@ loginModal.innerHTML = `
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Herodotus Settings</h5>
-        <button type="button" class="btn-close" aria-label="Close" id="closeModal"></button>
+        <button type="button" class="btn-close" aria-label="Close" id="closeLoginModal"></button>
       </div>
       <div class="modal-body">
         <div class="mb-3">
@@ -73,7 +73,7 @@ loginModal.innerHTML = `
         </div>
       </div>
       <div class="modal-footer">
-        <button id="submitButton" class="btn btn-primary">Submit</button>
+        <button id="loginSubmitButton" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
@@ -102,7 +102,7 @@ getHerodotusData().then((data) => {
 });
 
 // Handle the submit button click
-(document.getElementById("submitButton") as HTMLButtonElement).onclick =
+(document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick =
   function () {
     const destinationChain = (
       document.getElementById("destinationChain") as HTMLSelectElement
@@ -127,7 +127,7 @@ getHerodotusData().then((data) => {
   };
 
 // Close the modal when the user clicks the close button
-document.getElementById("closeModal")!.onclick = function () {
+document.getElementById("closeLoginModal")!.onclick = function () {
   loginModal.classList.remove("show");
   loginModal.style.display = "none";
 };

@@ -2,8 +2,129 @@ import axios from "axios";
 import { getHerodotusData } from "../misc";
 import { apiRequestBuilder } from "../storage-slot-api";
 
+// ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
+// ░█░█░█░█░█░█░█▀█░█░░░▀▀█
+// ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
+
+const createNewModal = (ctx: { id: string; inner: string; title: string }) => {
+  let newModal = document.createElement("div");
+  newModal = document.createElement("div");
+  newModal.classList.add("modal", "fade");
+  newModal.setAttribute("tabindex", "-1");
+  newModal.id = ctx.id;
+  newModal.setAttribute("tabindex", "-1");
+  newModal.setAttribute("role", "dialog");
+
+  newModal.innerHTML = `
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title">${ctx.title}</h5>
+        <button type="button" class="btn-close" aria-label="Close" id="close${ctx.id}"></button>
+    </div>
+      <div class="modal-body">
+        ${ctx.inner}
+      </div>
+      <div class="modal-footer">
+        <button id="submit${ctx.id}" class="btn btn-primary">Submit</button>
+      </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+  return newModal;
+};
+
+let proveAccountModal: HTMLDivElement = createNewModal({
+  id: "proveAccountModal",
+  inner: `
+  
+<form id="proveAccountForm">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="blockNumber">Block Number:</label>
+              <input type="number" id="blockNumber" name="blockNumber" class="form-control" required placeholder="e.g. 100000" />
+            </div>
+          </div>
+        </form>
+
+  `,
+  title: "Prove Account",
+});
+
+document.body.appendChild(proveAccountModal);
+
+document.getElementById(`closeproveAccountModal`)!.onclick = function () {
+  proveAccountModal.classList.remove("show");
+  proveAccountModal.style.display = "none";
+};
+
+async function onProveAccountModalSubmit() {
+  const blockNumberInput = document.getElementById(
+    "blockNumber"
+  ) as HTMLInputElement;
+  const blockNumber = parseInt(blockNumberInput.value, 10);
+
+  console.log("Block Number:", blockNumber);
+
+  if (isNaN(blockNumber)) {
+    alert("Please enter a valid block number.");
+    return;
+  }
+
+  const localData = await getHerodotusData();
+  if (!localData || !localData.destinationChain) {
+    alert(
+      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
+    );
+    return;
+  }
+
+  const data = apiRequestBuilder.getAccountProperties({
+    account: address,
+    blockNumber: blockNumber,
+    destinationChainId: localData.destinationChain,
+    originChainId: "11155111",
+    properties: ["BALANCE"],
+  });
+
+  const result = await axios.post(
+    "https://staging.api.herodotus.cloud/submit-batch-query",
+    data,
+    {
+      headers: {
+        "api-key": localData.apiKey,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  alert(
+    `Prove account request submitted. Check the status here: https://staging.dashboard.herodotus.dev/explorer/query/${result.data.internalId}`
+  );
+}
+
+document.getElementById(`submitproveAccountModal`)!.onclick =
+  onProveAccountModalSubmit;
+
+window.onclick = function (event) {
+  if (event.target === proveAccountModal) {
+    proveAccountModal.classList.remove("show");
+    proveAccountModal.style.display = "none";
+  }
+};
+
+async function proveEthBalanceButtonClickHandler() {
+  proveAccountModal.classList.add("show");
+  proveAccountModal.style.display = "block";
+}
+
+// ░█▄█░▀█▀░█▀▀░█▀▀
+// ░█░█░░█░░▀▀█░█░░
+// ░▀░▀░▀▀▀░▀▀▀░▀▀▀
+
 const address = window.location.pathname.split("/")[2];
-let proveAccountModal: HTMLDivElement;
 
 // FIXME: make better selector
 // get the element with text ETH Balance
@@ -36,109 +157,4 @@ if (ethBalanceElement) {
   document
     .getElementById("proveEthBalance")
     ?.addEventListener("click", proveEthBalanceButtonClickHandler);
-}
-
-function closeModal() {
-  if (proveAccountModal) {
-    proveAccountModal.classList.remove("show");
-    proveAccountModal.style.display = "none";
-    proveAccountModal.remove();
-  }
-}
-
-async function onModalSubmit() {
-  console.log("Submit button clicked!"); // To confirm the event triggers
-
-  try {
-    const czoto = await axios.get(
-      "https://staging.api.herodotus.cloud/is-alive"
-    );
-    console.log("Is Alive Response:", czoto.data);
-  } catch (err) {
-    console.error("Failed to reach is-alive endpoint:", err);
-  }
-
-  const blockNumberInput = document.getElementById(
-    "blockNumber"
-  ) as HTMLInputElement;
-  const blockNumber = parseInt(blockNumberInput.value, 10);
-
-  if (isNaN(blockNumber)) {
-    alert("Please enter a valid block number.");
-    return;
-  }
-
-  const data = await getHerodotusData();
-  if (!data || !data.destinationChain) {
-    alert(
-      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
-    );
-    return;
-  }
-
-  const result = await apiRequestBuilder.getAccountProperties({
-    account: address,
-    blockNumber: blockNumber,
-    destinationChainId: data.destinationChain,
-    originChainId: "11155111",
-    properties: ["BALANCE"],
-  });
-
-  console.log("Account Properties Result:", result);
-
-  closeModal();
-}
-
-async function proveEthBalanceButtonClickHandler() {
-  // Create and append the modal to the DOM before selecting elements from it
-  proveAccountModal = document.createElement("div");
-  proveAccountModal.classList.add("modal", "fade");
-  proveAccountModal.setAttribute("tabindex", "-1");
-  proveAccountModal.innerHTML = `
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Herodotus Settings</h5>
-          <button type="button" class="btn-close" aria-label="Close" id="closeModal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="blockNumber" class="form-label">Block Number:</label>
-            <input type="number" id="blockNumber" name="blockNumber" class="form-control" placeholder="e.g. 100000" />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button id="submitButton" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  document.body.appendChild(proveAccountModal);
-
-  // Show the modal
-  proveAccountModal.classList.add("show");
-  proveAccountModal.style.display = "block";
-
-  const closeModalButton = document.getElementById(
-    "closeModal"
-  ) as HTMLButtonElement;
-  const submitButton = document.getElementById(
-    "submitButton"
-  ) as HTMLButtonElement;
-
-  // Add event listeners after elements exist
-  closeModalButton.onclick = closeModal;
-  submitButton.onclick = onModalSubmit;
-
-  // Close modal when clicking outside modal-dialog (optional)
-  window.onclick = function (event) {
-    // If the user clicks outside the .modal-dialog, close
-    if (
-      event.target instanceof HTMLElement &&
-      event.target === proveAccountModal
-    ) {
-      closeModal();
-    }
-  };
 }
