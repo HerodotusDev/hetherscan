@@ -1,5 +1,5 @@
-import { readdirSync, mkdirSync, cpSync, watch } from "fs";
-import { join, dirname } from "path";
+import { cpSync, mkdirSync, readdirSync, watch } from "fs";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -24,9 +24,7 @@ function getAllFiles(dir: string, fileList: string[] = []): string[] {
 
 async function build() {
   const allSrcFiles = getAllFiles(srcDir);
-  const entrypoints = allSrcFiles.filter(
-    (file) => file.endsWith(".ts") && !file.endsWith(".d.ts")
-  );
+  const entrypoints = allSrcFiles.filter((file) => file.endsWith(".ts") && !file.endsWith(".d.ts"));
 
   await Bun.build({
     entrypoints,

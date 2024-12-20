@@ -1,21 +1,14 @@
 // ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
 // ░█░█░█░█░█░█░█▀█░█░░░▀▀█
 // ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
-
 import axios from "axios";
+
 import { getHerodotusData, setHerodotusData } from "../misc";
-import {
-  apiRequestBuilder,
-  getDashboardUrl,
-  headerProperties,
-  HEDODOTUS_URL,
-} from "../storage-slot-api";
 import { createNewModal, generateCheckboxes } from "../modal";
+import { apiRequestBuilder, getDashboardUrl, headerProperties, HEDODOTUS_URL } from "../storage-slot-api";
 
 async function onProveBlockModalSubmit() {
-  const checkboxes = document.querySelectorAll(
-    `#${proveBlockModalId} input[type="checkbox"]`
-  );
+  const checkboxes = document.querySelectorAll(`#${proveBlockModalId} input[type="checkbox"]`);
 
   const allCheckedValues = Array.from(checkboxes)
     .filter((checkbox) => (checkbox as HTMLInputElement).checked)
@@ -28,9 +21,7 @@ async function onProveBlockModalSubmit() {
 
   const localData = await getHerodotusData();
   if (!localData || !localData.destinationChain) {
-    alert(
-      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
-    );
+    alert("Please ensure you have set up your Herodotus data (destinationChain, API key).");
     return;
   }
 
@@ -48,11 +39,7 @@ async function onProveBlockModalSubmit() {
     },
   });
 
-  alert(
-    `Prove account request submitted. Check the status here: ${getDashboardUrl(
-      result.data.internalId
-    )}`
-  );
+  alert(`Prove account request submitted. Check the status here: ${getDashboardUrl(result.data.internalId)}`);
 }
 
 let proveBlockModalId = "proveBlockModal";
@@ -96,8 +83,7 @@ document.getElementById(`close${proveBlockModalId}`)!.onclick = function () {
   proveAccountModal.style.display = "none";
 };
 
-document.getElementById(`submit${proveBlockModalId}`)!.onclick =
-  onProveBlockModalSubmit;
+document.getElementById(`submit${proveBlockModalId}`)!.onclick = onProveBlockModalSubmit;
 
 window.onclick = function (event) {
   if (event.target === proveAccountModal) {
@@ -115,9 +101,7 @@ const block = window.location.pathname.split("/")[2];
 // FIXME: make better selector
 // get the element with text ETH Balance
 // @ts-ignore
-const blockNumberElement = [...document.querySelectorAll("*")].find(
-  (el) => el.textContent.trim() === `#${block}`
-);
+const blockNumberElement = [...document.querySelectorAll("*")].find((el) => el.textContent.trim() === `#${block}`);
 
 function createNewButton(id: string) {
   const newButton = document.createElement("button");
@@ -129,10 +113,7 @@ function createNewButton(id: string) {
 if (blockNumberElement) {
   const newButton = createNewButton("proveBlock");
   newButton.classList.add("ms-2");
-  blockNumberElement.parentNode!.insertBefore(
-    newButton,
-    blockNumberElement.nextSibling
-  );
+  blockNumberElement.parentNode!.insertBefore(newButton, blockNumberElement.nextSibling);
 
   newButton.onclick = function () {
     proveAccountModal.classList.add("show");

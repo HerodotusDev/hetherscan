@@ -4,11 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "bun build.ts",
-    "dev": "bun build.ts --watch"
+    "dev": "bun build.ts --watch",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@types/chrome": "^0.0.287",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prettier": "^3.4.2",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

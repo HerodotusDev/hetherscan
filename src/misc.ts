@@ -18,9 +18,7 @@ const defaultHerodotusData: HerodotusSingleton = {
   sentQueries: [],
 };
 
-export async function setHerodotusData(
-  data: Partial<HerodotusSingleton>
-): Promise<void> {
+export async function setHerodotusData(data: Partial<HerodotusSingleton>): Promise<void> {
   const currentData = await getHerodotusData();
   const updatedData = { ...currentData, ...data };
   await chrome.storage.local.set({ herodotus: updatedData });

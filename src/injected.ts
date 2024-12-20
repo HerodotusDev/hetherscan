@@ -3,8 +3,34 @@ declare global {
     ethereum?: {
       request: (args: { method: string; params?: any[] }) => Promise<any>;
     };
+    readDiamondContractLoaded: boolean;
+    writeDiamondContractLoaded: boolean;
+    loadIframeSourceDiamondRead: (fLine?: string) => void;
+    loadIframeSourceDiamondWrite: (fLine?: string) => void;
+    activaTab: (tab: string) => void;
+    cards_loaded?: boolean;
+    loaddisqus: () => void;
+    loadIframeSource: (fNumber?: string) => void;
+    loadIframeSource5: (fNumber?: string) => void;
+    loadIframeSourceProxyRead: (fNumber?: string) => void;
+    loadIframeSourceProxyWrite: (fNumber?: string) => void;
+    loadIframeSourceMultipleReadProxy: (fNumber?: string) => void;
+    loadIframeSourceCustomRead: (fNumber?: string) => void;
+    loadIframeSourceCustomWrite: (fNumber?: string) => void;
+    loadIframeSourceNftTransfer: () => void;
+    loadIframeSource7: (tab: string) => void;
+    loadIframeSource2: () => void;
+    loadIframeSource8: () => void;
+    loadCardsIframe: () => void;
+    showLoader: (loaded?: boolean) => void;
+    loadIframeEvents: () => void;
+    myTocSelect: (text: string) => void;
   }
+  var $: any;
+  var bootstrap: any;
 }
+
+declare let tempI: number;
 
 window.addEventListener("message", async (event) => {
   if (event.source !== window) return;
@@ -18,7 +44,7 @@ window.addEventListener("message", async (event) => {
           accounts: null,
           error: "No Ethereum provider found.",
         },
-        "*"
+        "*",
       );
       return;
     }
@@ -29,45 +55,38 @@ window.addEventListener("message", async (event) => {
       });
       window.postMessage({ type: "METAMASK_RESPONSE", accounts }, "*");
     } catch (error: any) {
-      window.postMessage(
-        { type: "METAMASK_RESPONSE", accounts: null, error: error.message },
-        "*"
-      );
+      window.postMessage({ type: "METAMASK_RESPONSE", accounts: null, error: error.message }, "*");
     }
   }
 });
 (window as any).readDiamondContractLoaded = false;
-(window as any).loadIframeSourceDiamondRead = function (fLine) {
+(window as any).loadIframeSourceDiamondRead = function (fLine: string) {
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
     // TODO: here is a link that is placed inside an iframe
-    const link =
-      "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
+    const link = "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
     if (fLine) {
-      document.getElementById("readdiamondcontractiframe").src =
-        link + "&F=" + fLine;
+      (document.getElementById("readdiamondcontractiframe") as HTMLIFrameElement).src = link + "&F=" + fLine;
     } else {
-      document.getElementById("readdiamondcontractiframe").src = link;
+      (document.getElementById("readdiamondcontractiframe") as HTMLIFrameElement).src = link;
     }
   }
 };
 (window as any).writeDiamondContractLoaded = false;
-(window as any).loadIframeSourceDiamondWrite = function (fLine) {
+(window as any).loadIframeSourceDiamondWrite = function (fLine: string) {
   if (window.writeDiamondContractLoaded == false) {
     window.writeDiamondContractLoaded = true;
     // TODO: here is a link that is placed inside an iframe
-    const link =
-      "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
+    const link = "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
     if (fLine) {
-      document.getElementById("writediamondcontractiframe").src =
-        link + "&F=" + fLine;
+      (document.getElementById("writediamondcontractiframe") as HTMLIFrameElement).src = link + "&F=" + fLine;
     } else {
-      document.getElementById("writediamondcontractiframe").src = link;
+      (document.getElementById("writediamondcontractiframe") as HTMLIFrameElement).src = link;
     }
   }
 };
 function fixTabElements() {
-  document.querySelectorAll(".nav-subtabs li a").forEach((tab) => {
+  document.querySelectorAll<HTMLAnchorElement>(".nav-subtabs li a").forEach((tab) => {
     if (!bootstrap.Tab.getInstance(tab)) {
       new bootstrap.Tab(tab);
     }
@@ -79,50 +98,50 @@ $(document).ready(function () {
   const hash = window.location.hash;
   setTimeout(() => {
     if (hash == "#readDiamond" || hash == "#writeDiamond") {
-      activaTab(hash.slice(1));
+      window.activaTab(hash.slice(1));
     }
   }, 0);
 });
 
-(window as any).activaTab = function (tab) {
-  var subtab = "0";
-  let fNumber;
+(window as any).activaTab = function (tab: string): void {
+  var subtab: string = "0";
+  let fNumber: string | undefined;
   if (tab.lastIndexOf("#") > -1) {
     fNumber = tab.substring(tab.lastIndexOf("#"), tab.length);
     fNumber = fNumber.replace("#F", "");
   }
   if (tab.indexOf("comment") >= 0) {
     tab = "comments";
-    loaddisqus();
+    window.loaddisqus();
   } else if (tab.indexOf("code") >= 0) {
     subtab = "1";
   } else if (tab.indexOf("readContract") >= 0) {
     subtab = "1";
-    loadIframeSource(fNumber);
+    window.loadIframeSource(fNumber);
   } else if (tab.indexOf("writeContract") >= 0) {
     subtab = "1";
-    loadIframeSource5(fNumber);
+    window.loadIframeSource5(fNumber);
   } else if (tab.indexOf("readProxyContract") >= 0) {
     subtab = "1";
-    loadIframeSourceProxyRead(fNumber);
+    window.loadIframeSourceProxyRead(fNumber);
   } else if (tab.indexOf("writeProxyContract") >= 0) {
     subtab = "1";
-    loadIframeSourceProxyWrite(fNumber);
+    window.loadIframeSourceProxyWrite(fNumber);
   } else if (tab.indexOf("multipleProxyContract") >= 0) {
     subtab = "1";
-    loadIframeSourceMultipleReadProxy(fNumber);
+    window.loadIframeSourceMultipleReadProxy(fNumber);
   } else if (tab.indexOf("readCustomContract") >= 0) {
     subtab = "1";
-    loadIframeSourceCustomRead(fNumber);
+    window.loadIframeSourceCustomRead(fNumber);
   } else if (tab.indexOf("writeCustomContract") >= 0) {
     subtab = "1";
-    loadIframeSourceCustomWrite(fNumber);
+    window.loadIframeSourceCustomWrite(fNumber);
   } else if (tab.indexOf("readDiamond") >= 0) {
     subtab = "1";
-    loadIframeSourceDiamondRead(fNumber);
+    window.loadIframeSourceDiamondRead(fNumber);
   } else if (tab.indexOf("writeDiamond") >= 0) {
     subtab = "1";
-    loadIframeSourceDiamondWrite(fNumber);
+    window.loadIframeSourceDiamondWrite(fNumber);
   }
   //else if (tab.indexOf('tokentxnsErc721') >= 0) {
   //    loadIframeSource6();
@@ -131,42 +150,30 @@ $(document).ready(function () {
   //    loadIframeSourceErc1155();
   //}
   else if (tab.indexOf("nfttransfers") >= 0) {
-    loadIframeSourceNftTransfer();
+    window.loadIframeSourceNftTransfer();
   } else if (tab.indexOf("analytics") >= 0) {
-    bootstrap.Tab.getInstance(
-      document.querySelector('.nav_tabs1 a[data-bs-target="#analytics"]')
-    ).show();
-    loadIframeSource7(tab);
+    bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 a[data-bs-target="#analytics"]')).show();
+    window.loadIframeSource7(tab);
   } else if (tab.indexOf("tokentxns") >= 0) {
-    loadIframeSource2();
+    window.loadIframeSource2();
   }
   //else if (tab.indexOf('loansAddress') >= 0) {
   //    loadIframeSource9();
   //}
   else if (tab.indexOf("cards") >= 0) {
-    loadCardsIframe();
-    showLoader(window.cards_loaded);
+    window.loadCardsIframe();
+    window.showLoader(window.cards_loaded);
   } else if (tab.indexOf("loans") >= 0) {
-    loadIframeSource8();
+    window.loadIframeSource8();
   } else if (tab.indexOf("events") >= 0) {
-    loadIframeEvents();
-  } else if (
-    tab.indexOf("beaconchain") >= 0 ||
-    tab.indexOf("deposits") >= 0 ||
-    tab.indexOf("withdrawals") >= 0
-  ) {
-    let beaconChainTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#beaconchain"]'
-    );
+    window.loadIframeEvents();
+  } else if (tab.indexOf("beaconchain") >= 0 || tab.indexOf("deposits") >= 0 || tab.indexOf("withdrawals") >= 0) {
+    let beaconChainTab = document.querySelector('.nav_tabs1 a[data-bs-target="#beaconchain"]');
     if (beaconChainTab) {
       bootstrap.Tab.getInstance(beaconChainTab).show();
     }
-    let depositsTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#deposits"]'
-    );
-    let withdrawalsTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#withdrawals"]'
-    );
+    let depositsTab = document.querySelector('.nav_tabs1 a[data-bs-target="#deposits"]');
+    let withdrawalsTab = document.querySelector('.nav_tabs1 a[data-bs-target="#withdrawals"]');
     if (!!depositsTab) {
       bootstrap.Tab.getInstance(depositsTab).show();
     } else if (!!withdrawalsTab) {
@@ -175,47 +182,25 @@ $(document).ready(function () {
   }
   var obj1 = document.getElementById("ContentPlaceHolder1_li_readContract");
   var obj2 = document.getElementById("ContentPlaceHolder1_li_writeContract");
-  var obj3 = document.getElementById(
-    "ContentPlaceHolder1_li_readProxyContract"
-  );
-  var obj4 = document.getElementById(
-    "ContentPlaceHolder1_li_writeProxyContract"
-  );
-  var obj5 = document.getElementById(
-    "ContentPlaceHolder1_li_readCustomContract"
-  );
-  var obj6 = document.getElementById(
-    "ContentPlaceHolder1_li_writeCustomContract"
-  );
-  var obj7 = document.getElementById(
-    "ContentPlaceHolder1_li_multipleProxyContract"
-  );
+  var obj3 = document.getElementById("ContentPlaceHolder1_li_readProxyContract");
+  var obj4 = document.getElementById("ContentPlaceHolder1_li_writeProxyContract");
+  var obj5 = document.getElementById("ContentPlaceHolder1_li_readCustomContract");
+  var obj6 = document.getElementById("ContentPlaceHolder1_li_writeCustomContract");
+  var obj7 = document.getElementById("ContentPlaceHolder1_li_multipleProxyContract");
   var obj8 = document.getElementById("ContentPlaceHolder1_li_readDiamond");
   var obj9 = document.getElementById("ContentPlaceHolder1_li_writeDiamond");
-  document.getElementById("divClientMultiSearch").style.display = "none";
+  document.getElementById("divClientMultiSearch")!.style.display = "none";
   if (subtab === "0") {
     if (tab.indexOf("analytics") >= 0) {
       //Do nothing.
     } else {
-      bootstrap.Tab.getInstance(
-        document.querySelector('.nav_tabs1 li a[data-bs-target="#' + tab + '"]')
-      ).show();
+      bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 li a[data-bs-target="#' + tab + '"]')).show();
     }
-    if (
-      obj1 === null &&
-      obj2 === null &&
-      obj3 === null &&
-      obj4 === null &&
-      obj5 === null &&
-      obj6 === null &&
-      obj7 === null &&
-      obj8 === null &&
-      obj9 === null
-    ) {
-      document.getElementById("nav_subtabs").style.display = "none";
+    if (obj1 === null && obj2 === null && obj3 === null && obj4 === null && obj5 === null && obj6 === null && obj7 === null && obj8 === null && obj9 === null) {
+      document.getElementById("nav_subtabs")!.style.display = "none";
       $("#code").attr("style", "display:visible;");
     } else {
-      document.getElementById("nav_subtabs").style.display = "visible";
+      document.getElementById("nav_subtabs")!.style.display = "visible";
       $("#code").attr("style", "display:visible;");
       $("#readContract").attr("style", "display:none;");
       $("#writeContract").attr("style", "display:none;");
@@ -234,36 +219,20 @@ $(document).ready(function () {
     if (tab.includes("#")) {
       tab = tab.split("#")[0];
     }
-    bootstrap.Tab.getInstance(
-      document.querySelector('.nav_tabs1 a[data-bs-target="#contracts"]')
-    ).show();
-    if (
-      obj1 === null &&
-      obj2 === null &&
-      obj3 === null &&
-      obj4 === null &&
-      obj5 === null &&
-      obj6 === null &&
-      obj7 === null &&
-      obj8 === null &&
-      obj9 === null
-    ) {
-      document.getElementById("nav_subtabs").style.display = "none";
+    bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 a[data-bs-target="#contracts"]')).show();
+    if (obj1 === null && obj2 === null && obj3 === null && obj4 === null && obj5 === null && obj6 === null && obj7 === null && obj8 === null && obj9 === null) {
+      document.getElementById("nav_subtabs")!.style.display = "none";
       $("#nav_subtabs").parent().removeClass("d-md-flex");
       $("#nav_subtabs").parent().hide();
     } else {
-      document.getElementById("nav_subtabs").style.display = "visible";
-      bootstrap.Tab.getInstance(
-        document.querySelector(
-          '.nav-subtabs li a[data-bs-target="#' + tab + '"]'
-        )
-      ).show();
+      document.getElementById("nav_subtabs")!.style.display = "visible";
+      bootstrap.Tab.getInstance(document.querySelector('.nav-subtabs li a[data-bs-target="#' + tab + '"]')).show();
       tempI++;
       if (tab === "code" && tempI === 2)
         setTimeout(function () {
           var searchText = window.localStorage.getItem("searchCode");
           if (searchText) {
-            myTocSelect("event " + searchText + "(");
+            window.myTocSelect("event " + searchText + "(");
             window.localStorage.removeItem("searchCode");
           }
         }, 1000);
@@ -277,7 +246,7 @@ $(document).ready(function () {
       $("#multipleProxyContract").attr("style", "display:none;");
       $("#readCustomContract").attr("style", "display:none;");
       $("#writeCustomContract").attr("style", "display:none;");
-      document.getElementById("divClientMultiSearch").style.display = "block";
+      document.getElementById("divClientMultiSearch")!.style.display = "block";
     } else if (tab == "readContract") {
       $("#readContract").attr("style", "display:visible;");
       $("#code").attr("style", "display:none;");
