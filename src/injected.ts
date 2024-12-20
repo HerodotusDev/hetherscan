@@ -28,47 +28,25 @@ declare global {
   }
   var $: any;
   var bootstrap: any;
+  var mode: string;
+  var strNetwork: string;
 }
 
 declare let tempI: number;
 
-window.addEventListener("message", async (event) => {
-  if (event.source !== window) return;
-
-  const data = event.data;
-  if (data && data.type === "METAMASK_REQUEST_ACCOUNTS") {
-    if (!window.ethereum) {
-      window.postMessage(
-        {
-          type: "METAMASK_RESPONSE",
-          accounts: null,
-          error: "No Ethereum provider found.",
-        },
-        "*",
-      );
-      return;
-    }
-
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      window.postMessage({ type: "METAMASK_RESPONSE", accounts }, "*");
-    } catch (error: any) {
-      window.postMessage({ type: "METAMASK_RESPONSE", accounts: null, error: error.message }, "*");
-    }
-  }
-});
 (window as any).readDiamondContractLoaded = false;
 (window as any).loadIframeSourceDiamondRead = function (fLine: string) {
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
-    // TODO: here is a link that is placed inside an iframe
-    const link = "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
-    if (fLine) {
-      (document.getElementById("readdiamondcontractiframe") as HTMLIFrameElement).src = link + "&F=" + fLine;
-    } else {
-      (document.getElementById("readdiamondcontractiframe") as HTMLIFrameElement).src = link;
+    const iframes = document.getElementById("readdiamondcontractiframe")!.children!;
+    console.log("💎 iframes.length", iframes.length);
+    for (let i = 0; i < iframes.length; i++) {
+      const iframe = iframes?.item(i)! as HTMLIFrameElement;
+      const address = iframe.getAttribute("data-address");
+      const moduleAddress = iframe.getAttribute("data-module-address");
+      let link = `/readContract?m=${window.mode}&a=${address}&n=${strNetwork}&v=${moduleAddress}&diamond=read`;
+      if (fLine) link += "&F=" + fLine;
+      iframe.src = link;
     }
   }
 };
@@ -349,18 +327,3 @@ $(document).ready(function () {
     }
   }
 };
-
-// $("#ContentPlaceHolder1_li_readDiamond").on("click", function () {
-//   console.log("CLICKED");
-//   $("#code").attr("style", "display:none;");
-//   $("#readContract").attr("style", "display:none;");
-//   $("#writeContract").attr("style", "display:none;");
-//   $("#readProxyContract").attr("style", "display:none;");
-//   $("#writeProxyContract").attr("style", "display:none;");
-//   $("#readCustomContract").attr("style", "display:none;");
-//   $("#writeCustomContract").attr("style", "display:none;");
-//   $("#readDiamond").attr("style", "display:visible;");
-
-//   var obj = document.getElementById("readdiamondcontractiframe");
-//   resizeIframe(obj, -20);
-// });
