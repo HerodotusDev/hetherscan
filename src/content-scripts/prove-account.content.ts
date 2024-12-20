@@ -49,7 +49,7 @@ let proveAccountModal: HTMLDivElement = createNewModalLocal({
       <div class="modal-body">
         <div class="form-group">
           <label for="blockNumber">Block Number:</label>
-              <input type="number" id="blockNumber" name="blockNumber" class="form-control" required placeholder="e.g. 100000" />
+              <input type="number" id="blockNumber" name="blockNumber" class="form-control" required placeholder="e.g. 2137" />
             </div>
           </div>
         </form>
@@ -145,7 +145,7 @@ let proveAllModalProperties: HTMLDivElement = createNewModal({
           <div class="modal-body">
               <div class="form-group">
               <label for="blockNumberAllProperties">Block Number:</label>
-                  <input type="number" id="blockNumberAllProperties" name="blockNumber" class="form-control" required placeholder="e.g. 100000" />
+                  <input type="number" id="blockNumberAllProperties" name="blockNumber" class="form-control" required placeholder="e.g. 2137" />
               </div>
           </div>
               ${generateCheckboxes(accountProperties)}

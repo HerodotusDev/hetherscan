@@ -14,7 +14,7 @@ if (!ethPriceElement) throw new Error("Eth price element not found");
 // Create the login button
 loginButton = document.createElement("button");
 loginButton.innerHTML = "🛰️ Log in with Herodotus";
-loginButton.classList.add("btn", "btn-primary");
+loginButton.classList.add("btn", "btn-primary", "btn-sm", "text-nowrap");
 loginButton.onclick = function () {
   // Show modal
   loginModal.classList.add("show");
@@ -24,7 +24,7 @@ loginButton.onclick = function () {
 // Create the logout button
 const logoutButton = document.createElement("button");
 logoutButton.innerHTML = "Logout";
-logoutButton.classList.add("btn", "btn-outline-primary", "ms-2"); // margin-start for spacing
+logoutButton.classList.add("btn", "btn-outline-primary", "btn-sm"); // margin-start for spacing
 logoutButton.onclick = function () {
   setHerodotusData({ destinationChain: undefined, apiKey: undefined });
   loginButton.innerHTML = "🛰️ Log in with Herodotus";
