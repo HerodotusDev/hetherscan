@@ -44,3 +44,28 @@ export const apiRequestBuilder = {
     };
   },
 };
+
+// export const zProvableHeaderProperty = z.enum([
+//   "PARENT_HASH",
+//   "UNCLES_HASH",
+//   "COINBASE",
+//   "PROPOSER",
+//   "STATE_ROOT",
+//   "TRANSACTIONS_ROOT",
+//   "RECEIPTS_ROOT",
+//   "LOGS_BLOOM",
+//   "DIFFICULTY",
+//   "BLOCK_NUMBER",
+//   "GAS_LIMIT",
+//   "GAS_USED",
+//   "TIMESTAMP",
+//   "EXTRA_DATA",
+//   "MIX_HASH",
+//   "NONCE",
+//   "BASE_FEE_PER_GAS",
+//   "WITHDRAWALS_ROOT",
+//   "BLOB_GAS_USED",
+//   "EXCESS_BLOB_GAS",
+//   "PARENT_BEACON_BLOCK_ROOT",
+//   "PROPOSER",
+// ]);
