@@ -3,6 +3,7 @@ import {
   getHerodotusData,
   deleteHerodotusData,
 } from "../misc";
+import { getDestinationForOriginChainId } from "../storage-slot-api";
 
 const ethPriceElement = document.querySelector("#ethPrice > span");
 let loginButton: HTMLButtonElement;
@@ -51,6 +52,10 @@ getHerodotusData().then((data) => {
 // Create the modal structure using Bootstrap classes
 loginModal = document.createElement("div");
 loginModal.classList.add("modal", "fade");
+const destinationChains = getDestinationForOriginChainId("11155111");
+const options = destinationChains
+  .map((chain) => `<option value="${chain}">${chain}</option>`)
+  .join("");
 loginModal.setAttribute("tabindex", "-1");
 loginModal.innerHTML = `
   <div class="modal-dialog">
@@ -63,8 +68,7 @@ loginModal.innerHTML = `
         <div class="mb-3">
           <label for="destinationChain" class="form-label">Destination Chain:</label>
           <select id="destinationChain" name="destinationChain" class="form-select">
-            <option value="11155111">11155111</option>
-            <option value="SN_Sepolia">SN_Sepolia</option>
+            ${options}
           </select>
         </div>
         <div class="mb-3">

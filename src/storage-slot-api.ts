@@ -45,6 +45,43 @@ export const apiRequestBuilder = {
   },
 };
 
+const connections = [
+  {
+    originChainId: "11155111",
+    destinationChainId: "300",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "11155111",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "11155420",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "SN_SEPOLIA",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "421614",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "4801",
+  },
+  {
+    originChainId: "11155111",
+    destinationChainId: "33111",
+  },
+];
+
+export const getDestinationForOriginChainId = (originChainId: string) => {
+  return connections
+    .filter((c) => c.originChainId === originChainId)
+    .map((c) => c.destinationChainId);
+};
+
 // export const zProvableHeaderProperty = z.enum([
 //   "PARENT_HASH",
 //   "UNCLES_HASH",
