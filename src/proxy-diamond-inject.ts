@@ -10,10 +10,11 @@ window.onload = function () {
   }
   const capital = param.charAt(0).toUpperCase() + param.slice(1);
 
-  window.parent.document.getElementById("loading" + capital + "DiamondContractframe").style.display = "none";
+  window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";
 
   setTimeout(function () {
     var obj = window.parent.document.getElementById(param + "diamondcontractiframe");
+    // @ts-ignore
     if (obj) parent.resizeIframe(obj, 0);
   }, 300);
 };
