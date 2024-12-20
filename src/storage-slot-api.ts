@@ -1,19 +1,12 @@
 export const HEDODOTUS_URL = "https://staging.api.herodotus.cloud";
 
-export const DASHBOARD_URL =
-  "https://staging.dashboard.herodotus.dev/explorer/query";
+export const DASHBOARD_URL = "https://staging.dashboard.herodotus.dev/explorer/query";
 export const getDashboardUrl = (internalId: string) => {
   return `${DASHBOARD_URL}/${internalId}`;
 };
 
 export const apiRequestBuilder = {
-  getAccountProperties: (ctx: {
-    originChainId: string;
-    destinationChainId: string;
-    blockNumber: number;
-    account: string;
-    properties: string[];
-  }) => {
+  getAccountProperties: (ctx: { originChainId: string; destinationChainId: string; blockNumber: number; account: string; properties: string[] }) => {
     return {
       destinationChainId: ctx.destinationChainId,
       fee: "0",
@@ -31,12 +24,7 @@ export const apiRequestBuilder = {
       },
     };
   },
-  getBlockHeaderProperties: (ctx: {
-    originChainId: string;
-    destinationChainId: string;
-    blockNumber: string;
-    properties: string[];
-  }) => {
+  getBlockHeaderProperties: (ctx: { originChainId: string; destinationChainId: string; blockNumber: string; properties: string[] }) => {
     return {
       destinationChainId: ctx.destinationChainId,
       fee: "0",
@@ -51,12 +39,7 @@ export const apiRequestBuilder = {
   },
 };
 
-export const accountProperties = [
-  "BALANCE",
-  "NONCE",
-  "CODE_HASH",
-  "STORAGE_ROOT",
-];
+export const accountProperties = ["BALANCE", "NONCE", "CODE_HASH", "STORAGE_ROOT"];
 
 // FIXME: this comes from backend
 // https://staging.api.herodotus.cloud/chain-connections
@@ -92,9 +75,7 @@ const connections = [
 ];
 
 export const getDestinationForOriginChainId = (originChainId: string) => {
-  return connections
-    .filter((c) => c.originChainId === originChainId)
-    .map((c) => c.destinationChainId);
+  return connections.filter((c) => c.originChainId === originChainId).map((c) => c.destinationChainId);
 };
 
 export const headerProperties = [

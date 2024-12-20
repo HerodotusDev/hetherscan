@@ -1,8 +1,4 @@
-export const createNewModal = (ctx: {
-  id: string;
-  inner: string;
-  title: string;
-}) => {
+export const createNewModal = (ctx: { id: string; inner: string; title: string }) => {
   let newModal = document.createElement("div");
   newModal = document.createElement("div");
   newModal.classList.add("modal", "fade");
@@ -42,7 +38,7 @@ export const generateCheckboxes = (properties: string[]) => {
             ${property}
           </label>
         </div>
-      `
+      `,
     )
     .join("");
 };

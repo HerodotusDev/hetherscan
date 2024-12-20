@@ -1,22 +1,14 @@
 import axios from "axios";
+
 import { getHerodotusData, setHerodotusData } from "../misc";
-import {
-  accountProperties,
-  apiRequestBuilder,
-  getDashboardUrl,
-  HEDODOTUS_URL,
-} from "../storage-slot-api";
 import { createNewModal, generateCheckboxes } from "../modal";
+import { accountProperties, apiRequestBuilder, getDashboardUrl, HEDODOTUS_URL } from "../storage-slot-api";
 
 // ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
 // ░█░█░█░█░█░█░█▀█░█░░░▀▀█
 // ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
 
-const createNewModalLocal = (ctx: {
-  id: string;
-  inner: string;
-  title: string;
-}) => {
+const createNewModalLocal = (ctx: { id: string; inner: string; title: string }) => {
   let newModal = document.createElement("div");
   newModal = document.createElement("div");
   newModal.classList.add("modal", "fade");
@@ -71,9 +63,7 @@ document.getElementById(`closeproveAccountModal`)!.onclick = function () {
 };
 
 async function onProveAccountModalSubmit() {
-  const blockNumberInput = document.getElementById(
-    "blockNumber"
-  ) as HTMLInputElement;
+  const blockNumberInput = document.getElementById("blockNumber") as HTMLInputElement;
   const blockNumber = parseInt(blockNumberInput.value, 10);
 
   console.log("Block Number:", blockNumber);
@@ -85,9 +75,7 @@ async function onProveAccountModalSubmit() {
 
   const localData = await getHerodotusData();
   if (!localData || !localData.destinationChain) {
-    alert(
-      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
-    );
+    alert("Please ensure you have set up your Herodotus data (destinationChain, API key).");
     return;
   }
 
@@ -106,15 +94,10 @@ async function onProveAccountModalSubmit() {
     },
   });
 
-  alert(
-    `Prove account request submitted. Check the status here: ${getDashboardUrl(
-      result.data.internalId
-    )}`
-  );
+  alert(`Prove account request submitted. Check the status here: ${getDashboardUrl(result.data.internalId)}`);
 }
 
-document.getElementById(`submitproveAccountModal`)!.onclick =
-  onProveAccountModalSubmit;
+document.getElementById(`submitproveAccountModal`)!.onclick = onProveAccountModalSubmit;
 
 window.onclick = function (event) {
   if (event.target === proveAccountModal) {
@@ -127,9 +110,7 @@ async function proveEthBalanceClickHandler() {
   proveAccountModal.classList.add("show");
   proveAccountModal.style.display = "block";
 
-  const blockNumberInput = document.getElementById(
-    "blockNumber"
-  ) as HTMLInputElement;
+  const blockNumberInput = document.getElementById("blockNumber") as HTMLInputElement;
 
   // make default block number the latest block
   const latestBlock = await getLatestBlock();
@@ -160,9 +141,7 @@ async function proveAllPropertiesClickHandler() {
   proveAllModalProperties.classList.add("show");
   proveAllModalProperties.style.display = "block";
 
-  const blockNumberInput = document.getElementById(
-    "blockNumberAllProperties"
-  ) as HTMLInputElement;
+  const blockNumberInput = document.getElementById("blockNumberAllProperties") as HTMLInputElement;
 
   // make default block number the latest block
   const latestBlock = await getLatestBlock();
@@ -171,14 +150,12 @@ async function proveAllPropertiesClickHandler() {
 
 document.body.appendChild(proveAllModalProperties);
 
-document.getElementById(`close${proveAllModalPropertiesId}`)!.onclick =
-  function () {
-    proveAllModalProperties.classList.remove("show");
-    proveAllModalProperties.style.display = "none";
-  };
+document.getElementById(`close${proveAllModalPropertiesId}`)!.onclick = function () {
+  proveAllModalProperties.classList.remove("show");
+  proveAllModalProperties.style.display = "none";
+};
 
-document.getElementById(`submit${proveAllModalPropertiesId}`)!.onclick =
-  onProveAllAccountPropertiesSubmit;
+document.getElementById(`submit${proveAllModalPropertiesId}`)!.onclick = onProveAllAccountPropertiesSubmit;
 
 window.onclick = function (event) {
   if (event.target === proveAllModalProperties) {
@@ -188,14 +165,10 @@ window.onclick = function (event) {
 };
 
 async function onProveAllAccountPropertiesSubmit() {
-  const blockNumberInput = document.getElementById(
-    "blockNumberAllProperties"
-  ) as HTMLInputElement;
+  const blockNumberInput = document.getElementById("blockNumberAllProperties") as HTMLInputElement;
   const blockNumber = parseInt(blockNumberInput.value, 10);
 
-  const checkboxes = document.querySelectorAll(
-    `#${proveAllModalPropertiesId} input[type="checkbox"]`
-  );
+  const checkboxes = document.querySelectorAll(`#${proveAllModalPropertiesId} input[type="checkbox"]`);
 
   const allCheckedValues = Array.from(checkboxes)
     .filter((checkbox) => (checkbox as HTMLInputElement).checked)
@@ -208,9 +181,7 @@ async function onProveAllAccountPropertiesSubmit() {
 
   const localData = await getHerodotusData();
   if (!localData || !localData.destinationChain) {
-    alert(
-      "Please ensure you have set up your Herodotus data (destinationChain, API key)."
-    );
+    alert("Please ensure you have set up your Herodotus data (destinationChain, API key).");
     return;
   }
 
@@ -229,11 +200,7 @@ async function onProveAllAccountPropertiesSubmit() {
     },
   });
 
-  alert(
-    `Prove account request submitted. Check the status here: ${getDashboardUrl(
-      result.data.internalId
-    )}`
-  );
+  alert(`Prove account request submitted. Check the status here: ${getDashboardUrl(result.data.internalId)}`);
 }
 
 // ░█▄█░▀█▀░█▀▀░█▀▀
@@ -263,9 +230,7 @@ const address = window.location.pathname.split("/")[2];
 // FIXME: make better selector
 // get the element with text ETH Balance
 // @ts-ignore
-const ethBalanceElement = [...document.querySelectorAll("*")].find(
-  (el) => el.textContent.trim() === "ETH Balance"
-);
+const ethBalanceElement = [...document.querySelectorAll("*")].find((el) => el.textContent.trim() === "ETH Balance");
 
 const mainAddressElement = document.querySelector("#mainaddress");
 
@@ -278,30 +243,20 @@ function createNewButton(id: string, text: string = "🛰️ Prove") {
 }
 
 if (mainAddressElement) {
-  const newButton = createNewButton(
-    "proveAllProperties",
-    "🛰️ Prove Account Properties"
-  );
+  const newButton = createNewButton("proveAllProperties", "🛰️ Prove Account Properties");
   newButton.classList.add("ms-2");
 
   newButton.classList.add("ms-2");
-  mainAddressElement.parentNode!.insertBefore(
-    newButton,
-    mainAddressElement.nextSibling
-  );
+  mainAddressElement.parentNode!.insertBefore(newButton, mainAddressElement.nextSibling);
 
-  document
-    .getElementById("proveAllProperties")
-    ?.addEventListener("click", proveAllPropertiesClickHandler);
+  document.getElementById("proveAllProperties")?.addEventListener("click", proveAllPropertiesClickHandler);
 }
 
 if (ethBalanceElement) {
   const newButton = createNewButton("proveEthBalance");
   newButton.classList.add("ms-2");
 
-  const balanceDiv = ethBalanceElement
-    .closest("div")
-    ?.querySelector("div > div");
+  const balanceDiv = ethBalanceElement.closest("div")?.querySelector("div > div");
   if (balanceDiv) {
     balanceDiv.style.display = "flex";
     balanceDiv.style.alignItems = "center";
@@ -309,7 +264,5 @@ if (ethBalanceElement) {
   }
 
   // Add event listener to the prove button after it is created
-  document
-    .getElementById("proveEthBalance")
-    ?.addEventListener("click", proveEthBalanceClickHandler);
+  document.getElementById("proveEthBalance")?.addEventListener("click", proveEthBalanceClickHandler);
 }

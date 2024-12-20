@@ -18,7 +18,7 @@ window.addEventListener("message", async (event) => {
           accounts: null,
           error: "No Ethereum provider found.",
         },
-        "*"
+        "*",
       );
       return;
     }
@@ -29,10 +29,7 @@ window.addEventListener("message", async (event) => {
       });
       window.postMessage({ type: "METAMASK_RESPONSE", accounts }, "*");
     } catch (error: any) {
-      window.postMessage(
-        { type: "METAMASK_RESPONSE", accounts: null, error: error.message },
-        "*"
-      );
+      window.postMessage({ type: "METAMASK_RESPONSE", accounts: null, error: error.message }, "*");
     }
   }
 });
@@ -41,11 +38,9 @@ window.addEventListener("message", async (event) => {
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
     // TODO: here is a link that is placed inside an iframe
-    const link =
-      "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
+    const link = "/readContract?m=light&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&n=sepolia&v=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&diamond=read";
     if (fLine) {
-      document.getElementById("readdiamondcontractiframe").src =
-        link + "&F=" + fLine;
+      document.getElementById("readdiamondcontractiframe").src = link + "&F=" + fLine;
     } else {
       document.getElementById("readdiamondcontractiframe").src = link;
     }
@@ -56,11 +51,9 @@ window.addEventListener("message", async (event) => {
   if (window.writeDiamondContractLoaded == false) {
     window.writeDiamondContractLoaded = true;
     // TODO: here is a link that is placed inside an iframe
-    const link =
-      "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
+    const link = "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
     if (fLine) {
-      document.getElementById("writediamondcontractiframe").src =
-        link + "&F=" + fLine;
+      document.getElementById("writediamondcontractiframe").src = link + "&F=" + fLine;
     } else {
       document.getElementById("writediamondcontractiframe").src = link;
     }
@@ -133,9 +126,7 @@ $(document).ready(function () {
   else if (tab.indexOf("nfttransfers") >= 0) {
     loadIframeSourceNftTransfer();
   } else if (tab.indexOf("analytics") >= 0) {
-    bootstrap.Tab.getInstance(
-      document.querySelector('.nav_tabs1 a[data-bs-target="#analytics"]')
-    ).show();
+    bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 a[data-bs-target="#analytics"]')).show();
     loadIframeSource7(tab);
   } else if (tab.indexOf("tokentxns") >= 0) {
     loadIframeSource2();
@@ -150,23 +141,13 @@ $(document).ready(function () {
     loadIframeSource8();
   } else if (tab.indexOf("events") >= 0) {
     loadIframeEvents();
-  } else if (
-    tab.indexOf("beaconchain") >= 0 ||
-    tab.indexOf("deposits") >= 0 ||
-    tab.indexOf("withdrawals") >= 0
-  ) {
-    let beaconChainTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#beaconchain"]'
-    );
+  } else if (tab.indexOf("beaconchain") >= 0 || tab.indexOf("deposits") >= 0 || tab.indexOf("withdrawals") >= 0) {
+    let beaconChainTab = document.querySelector('.nav_tabs1 a[data-bs-target="#beaconchain"]');
     if (beaconChainTab) {
       bootstrap.Tab.getInstance(beaconChainTab).show();
     }
-    let depositsTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#deposits"]'
-    );
-    let withdrawalsTab = document.querySelector(
-      '.nav_tabs1 a[data-bs-target="#withdrawals"]'
-    );
+    let depositsTab = document.querySelector('.nav_tabs1 a[data-bs-target="#deposits"]');
+    let withdrawalsTab = document.querySelector('.nav_tabs1 a[data-bs-target="#withdrawals"]');
     if (!!depositsTab) {
       bootstrap.Tab.getInstance(depositsTab).show();
     } else if (!!withdrawalsTab) {
@@ -175,21 +156,11 @@ $(document).ready(function () {
   }
   var obj1 = document.getElementById("ContentPlaceHolder1_li_readContract");
   var obj2 = document.getElementById("ContentPlaceHolder1_li_writeContract");
-  var obj3 = document.getElementById(
-    "ContentPlaceHolder1_li_readProxyContract"
-  );
-  var obj4 = document.getElementById(
-    "ContentPlaceHolder1_li_writeProxyContract"
-  );
-  var obj5 = document.getElementById(
-    "ContentPlaceHolder1_li_readCustomContract"
-  );
-  var obj6 = document.getElementById(
-    "ContentPlaceHolder1_li_writeCustomContract"
-  );
-  var obj7 = document.getElementById(
-    "ContentPlaceHolder1_li_multipleProxyContract"
-  );
+  var obj3 = document.getElementById("ContentPlaceHolder1_li_readProxyContract");
+  var obj4 = document.getElementById("ContentPlaceHolder1_li_writeProxyContract");
+  var obj5 = document.getElementById("ContentPlaceHolder1_li_readCustomContract");
+  var obj6 = document.getElementById("ContentPlaceHolder1_li_writeCustomContract");
+  var obj7 = document.getElementById("ContentPlaceHolder1_li_multipleProxyContract");
   var obj8 = document.getElementById("ContentPlaceHolder1_li_readDiamond");
   var obj9 = document.getElementById("ContentPlaceHolder1_li_writeDiamond");
   document.getElementById("divClientMultiSearch").style.display = "none";
@@ -197,21 +168,9 @@ $(document).ready(function () {
     if (tab.indexOf("analytics") >= 0) {
       //Do nothing.
     } else {
-      bootstrap.Tab.getInstance(
-        document.querySelector('.nav_tabs1 li a[data-bs-target="#' + tab + '"]')
-      ).show();
+      bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 li a[data-bs-target="#' + tab + '"]')).show();
     }
-    if (
-      obj1 === null &&
-      obj2 === null &&
-      obj3 === null &&
-      obj4 === null &&
-      obj5 === null &&
-      obj6 === null &&
-      obj7 === null &&
-      obj8 === null &&
-      obj9 === null
-    ) {
+    if (obj1 === null && obj2 === null && obj3 === null && obj4 === null && obj5 === null && obj6 === null && obj7 === null && obj8 === null && obj9 === null) {
       document.getElementById("nav_subtabs").style.display = "none";
       $("#code").attr("style", "display:visible;");
     } else {
@@ -234,30 +193,14 @@ $(document).ready(function () {
     if (tab.includes("#")) {
       tab = tab.split("#")[0];
     }
-    bootstrap.Tab.getInstance(
-      document.querySelector('.nav_tabs1 a[data-bs-target="#contracts"]')
-    ).show();
-    if (
-      obj1 === null &&
-      obj2 === null &&
-      obj3 === null &&
-      obj4 === null &&
-      obj5 === null &&
-      obj6 === null &&
-      obj7 === null &&
-      obj8 === null &&
-      obj9 === null
-    ) {
+    bootstrap.Tab.getInstance(document.querySelector('.nav_tabs1 a[data-bs-target="#contracts"]')).show();
+    if (obj1 === null && obj2 === null && obj3 === null && obj4 === null && obj5 === null && obj6 === null && obj7 === null && obj8 === null && obj9 === null) {
       document.getElementById("nav_subtabs").style.display = "none";
       $("#nav_subtabs").parent().removeClass("d-md-flex");
       $("#nav_subtabs").parent().hide();
     } else {
       document.getElementById("nav_subtabs").style.display = "visible";
-      bootstrap.Tab.getInstance(
-        document.querySelector(
-          '.nav-subtabs li a[data-bs-target="#' + tab + '"]'
-        )
-      ).show();
+      bootstrap.Tab.getInstance(document.querySelector('.nav-subtabs li a[data-bs-target="#' + tab + '"]')).show();
       tempI++;
       if (tab === "code" && tempI === 2)
         setTimeout(function () {

@@ -34,18 +34,14 @@ window.addEventListener("message", (event) => {
 
   const data = event.data;
   if (data && data.type === "METAMASK_RESPONSE") {
-    infoDisplay.textContent = `Connected accounts: ${JSON.stringify(
-      data.accounts
-    )}`;
+    infoDisplay.textContent = `Connected accounts: ${JSON.stringify(data.accounts)}`;
   }
 });
 
 // Handle fetch button click
 fetchButton.addEventListener("click", async () => {
   // Example: fetch some public API
-  const response = await axios.get(
-    "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
-  );
+  const response = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd");
   const ethPrice = response.data.ethereum.usd;
   infoDisplay.textContent = `Current ETH price: $${ethPrice}`;
 });

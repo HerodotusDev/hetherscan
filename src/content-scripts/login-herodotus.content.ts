@@ -1,8 +1,4 @@
-import {
-  setHerodotusData,
-  getHerodotusData,
-  deleteHerodotusData,
-} from "../misc";
+import { deleteHerodotusData, getHerodotusData, setHerodotusData } from "../misc";
 import { getDestinationForOriginChainId } from "../storage-slot-api";
 
 const ethPriceElement = document.querySelector("#ethPrice > span");
@@ -34,18 +30,12 @@ logoutButton.onclick = function () {
 };
 
 // Insert login button
-ethPriceElement.parentNode!.insertBefore(
-  loginButton,
-  ethPriceElement.nextSibling
-);
+ethPriceElement.parentNode!.insertBefore(loginButton, ethPriceElement.nextSibling);
 
 // Only show logout button when logged in
 getHerodotusData().then((data) => {
   if (data?.apiKey) {
-    ethPriceElement.parentNode!.insertBefore(
-      logoutButton,
-      loginButton.nextSibling
-    );
+    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
   }
 });
 
@@ -53,9 +43,7 @@ getHerodotusData().then((data) => {
 loginModal = document.createElement("div");
 loginModal.classList.add("modal", "fade");
 const destinationChains = getDestinationForOriginChainId("11155111");
-const options = destinationChains
-  .map((chain) => `<option value="${chain}">${chain}</option>`)
-  .join("");
+const options = destinationChains.map((chain) => `<option value="${chain}">${chain}</option>`).join("");
 loginModal.setAttribute("tabindex", "-1");
 loginModal.innerHTML = `
   <div class="modal-dialog">
@@ -90,9 +78,7 @@ getHerodotusData().then((data) => {
     // Data found, update button and fields
     loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
 
-    const destinationChainSelect = document.getElementById(
-      "destinationChain"
-    ) as HTMLSelectElement;
+    const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
     const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
 
     if (destinationChainSelect && data.destinationChain) {
@@ -106,29 +92,22 @@ getHerodotusData().then((data) => {
 });
 
 // Handle the submit button click
-(document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick =
-  function () {
-    const destinationChain = (
-      document.getElementById("destinationChain") as HTMLSelectElement
-    ).value;
-    const apiKey = (document.getElementById("apiKey") as HTMLInputElement)
-      .value;
+(document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick = function () {
+  const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
+  const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
 
-    setHerodotusData({ destinationChain, apiKey });
+  setHerodotusData({ destinationChain, apiKey });
 
-    loginButton.innerHTML = "🛰️ Herodotus Logged In";
+  loginButton.innerHTML = "🛰️ Herodotus Logged In";
 
-    // Add logout button if not present
-    if (!logoutButton.parentNode) {
-      ethPriceElement.parentNode!.insertBefore(
-        logoutButton,
-        loginButton.nextSibling
-      );
-    }
+  // Add logout button if not present
+  if (!logoutButton.parentNode) {
+    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
+  }
 
-    loginModal.classList.remove("show");
-    loginModal.style.display = "none";
-  };
+  loginModal.classList.remove("show");
+  loginModal.style.display = "none";
+};
 
 // Close the modal when the user clicks the close button
 document.getElementById("closeLoginModal")!.onclick = function () {
@@ -145,9 +124,7 @@ window.onclick = function (event) {
 };
 
 // Add "Clear Herodotus Data" link to footer if present
-const footerMenu = document.querySelector(
-  ".d-flex.flex-wrap.justify-content-md-end.gap-2"
-);
+const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end.gap-2");
 if (footerMenu) {
   const clearDataLink = document.createElement("a");
   clearDataLink.className = "link-dark";

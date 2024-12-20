@@ -1,5 +1,6 @@
 import { createPublicClient, http, parseAbi } from "viem";
 import { sepolia } from "viem/chains";
+
 import { getHerodotusData, setHerodotusData } from "../misc";
 
 window.location.pathname.split("/")[2];
@@ -84,16 +85,8 @@ async function getDiamondModuleAddresses() {
     chain: sepolia,
   });
 
-  const functionSelector = (
-    document.getElementById(
-      "get-all-diamond-sub-addresses-selector"
-    ) as HTMLInputElement
-  )?.value;
-  const functionName = (
-    document.getElementById(
-      "get-all-diamond-sub-addresses-name"
-    ) as HTMLInputElement
-  )?.value;
+  const functionSelector = (document.getElementById("get-all-diamond-sub-addresses-selector") as HTMLInputElement)?.value;
+  const functionName = (document.getElementById("get-all-diamond-sub-addresses-name") as HTMLInputElement)?.value;
 
   try {
     const modules = await client.readContract({
@@ -117,10 +110,7 @@ async function getDiamondModuleAddresses() {
     });
     document.dispatchEvent(event);
 
-    diamondConfig?.insertAdjacentHTML(
-      "beforeend",
-      `<div class="diamond-status text-cap mt-2" style="font-size: 0.6rem; color: green;">Diamond loaded successfully</div>`
-    );
+    diamondConfig?.insertAdjacentHTML("beforeend", `<div class="diamond-status text-cap mt-2" style="font-size: 0.6rem; color: green;">Diamond loaded successfully</div>`);
   } catch (error) {
     console.error("Error fetching modules:", error);
     diamondConfig?.insertAdjacentHTML(
@@ -131,7 +121,7 @@ async function getDiamondModuleAddresses() {
           <div class="diamond-status-message mt-1 opacity-75" style="font-size: 0.5rem; color: red;">Error: ${
             error instanceof Error ? error.message : "Failed to load diamond"
           }</div>
-        </details>`
+        </details>`,
     );
   }
 }
@@ -139,8 +129,7 @@ async function getDiamondModuleAddresses() {
 async function renderDiamondUI() {
   const tab = window.herodotus.routeObserver?.currentTab;
 
-  const overviewSelector =
-    "#ContentPlaceHolder1_divSummary > div.row.g-3.mb-4 > div:nth-child(1) > div > div";
+  const overviewSelector = "#ContentPlaceHolder1_divSummary > div.row.g-3.mb-4 > div:nth-child(1) > div > div";
 
   const overviewElement = document.querySelector(overviewSelector);
   if (overviewElement) {
@@ -167,7 +156,7 @@ async function renderDiamondUI() {
             </div>
           </div>
         </div>
-      </details>`
+      </details>`,
     );
 
     // Load saved configuration for this address
@@ -175,12 +164,8 @@ async function renderDiamondUI() {
     const savedConfig = herodotusData?.contractConfigs?.[address];
 
     if (savedConfig) {
-      const selectorInput = document.getElementById(
-        "get-all-diamond-sub-addresses-selector"
-      ) as HTMLInputElement;
-      const nameInput = document.getElementById(
-        "get-all-diamond-sub-addresses-name"
-      ) as HTMLInputElement;
+      const selectorInput = document.getElementById("get-all-diamond-sub-addresses-selector") as HTMLInputElement;
+      const nameInput = document.getElementById("get-all-diamond-sub-addresses-name") as HTMLInputElement;
 
       if (selectorInput && nameInput) {
         selectorInput.value = savedConfig.functionSelector;
@@ -190,22 +175,19 @@ async function renderDiamondUI() {
   }
 
   // Add click event listener for the button
-  document
-    .getElementById("get-all-diamond-sub-addresses-button")
-    ?.addEventListener("click", getDiamondModuleAddresses);
+  document.getElementById("get-all-diamond-sub-addresses-button")?.addEventListener("click", getDiamondModuleAddresses);
 
   await getDiamondModuleAddresses();
 }
 
 document.addEventListener(
   "hdiamondloaded" as keyof DocumentEventMap,
-  ((event: CustomEvent<{ modules: string[] }>) =>
-    console.log("💎 Diamond loaded:", event.detail.modules)) as EventListener
+  ((event: CustomEvent<{ modules: string[] }>) => console.log("💎 Diamond loaded:", event.detail.modules)) as EventListener,
 );
 
 document.addEventListener(
   "htabchange" as keyof DocumentEventMap,
   ((_: CustomEvent<{ currentTab: string }>) => {
     renderDiamondUI();
-  }) as EventListener
+  }) as EventListener,
 );

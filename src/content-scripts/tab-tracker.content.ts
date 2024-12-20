@@ -11,8 +11,7 @@ function updateCurrentTab() {
 
 document.addEventListener(
   "htabchange" as keyof DocumentEventMap,
-  ((event: CustomEvent<{ currentTab: string }>) =>
-    console.log("🎯 Tab Changed:", event.detail.currentTab)) as EventListener
+  ((event: CustomEvent<{ currentTab: string }>) => console.log("🎯 Tab Changed:", event.detail.currentTab)) as EventListener,
 );
 
 function initializeListeners() {
