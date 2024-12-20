@@ -118,11 +118,37 @@ window.onclick = function (event) {
 async function proveEthBalanceButtonClickHandler() {
   proveAccountModal.classList.add("show");
   proveAccountModal.style.display = "block";
+
+  const blockNumberInput = document.getElementById(
+    "blockNumber"
+  ) as HTMLInputElement;
+
+  // make default block number the latest block
+  const latestBlock = await getLatestBlock();
+  blockNumberInput.value = (latestBlock! - 50).toString();
 }
 
 // ░█▄█░▀█▀░█▀▀░█▀▀
 // ░█░█░░█░░▀▀█░█░░
 // ░▀░▀░▀▀▀░▀▀▀░▀▀▀
+
+const SEPOLIA_RPC_URL = "https://ethereum-sepolia.publicnode.com";
+
+async function getLatestBlock() {
+  try {
+    const response = await axios.post(SEPOLIA_RPC_URL, {
+      jsonrpc: "2.0",
+      method: "eth_blockNumber",
+      params: [],
+      id: 1,
+    });
+
+    const latestBlockNumber = parseInt(response.data.result, 16);
+    return latestBlockNumber;
+  } catch (error) {
+    console.error("Error fetching latest block:", error.message);
+  }
+}
 
 const address = window.location.pathname.split("/")[2];
 
