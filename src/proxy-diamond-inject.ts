@@ -4,10 +4,12 @@
 // It is run only if query parameter `diamond` is set to `read` or `write`.
 
 window.onload = function () {
-  const param = new URLSearchParams(window.location.search).get("diamond");
+  const searchParams = new URLSearchParams(window.location.search);
+  const param = searchParams.get("diamond");
   if (param != "read" && param != "write") {
     return;
   }
+  window.contractframe = param +'diamondcontractiframe_' + searchParams.get("iframeId");
   const capital = param.charAt(0).toUpperCase() + param.slice(1);
 
   window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";

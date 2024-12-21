@@ -39,6 +39,8 @@ declare let tempI: number;
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
     const iframes = document.getElementById("readdiamondcontractiframe")!.children!;
+    window.readNumberOfIframes = iframes.length;
+
     for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes?.item(i)! as HTMLIFrameElement;
       const address = iframe.getAttribute("data-address");
@@ -54,6 +56,7 @@ declare let tempI: number;
   if (window.writeDiamondContractLoaded == false) {
     window.writeDiamondContractLoaded = true;
     const iframes = document.getElementById("writediamondcontractiframe")!.children!;
+    window.writeNumberOfIframes = iframes.length;
 
     for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes?.item(i)! as HTMLIFrameElement;
@@ -88,19 +91,33 @@ $(document).ready(function () {
 // So we handle that case in else block.
 window.resizeIframe = function(obj, addwidth) {
   setTimeout(function () {
-      obj.style.height = 0;
       if(obj.tagName === 'IFRAME') {
         obj.style.height = (obj.contentWindow.document.body.scrollHeight + addwidth) + 20 + 'px';
         obj.parentElement.style.visibility = 'visible';
       } else {
-        // TODO: make them visible only after all iframes are loaded
-        let new_height = 20;
-        for(const sub of obj.children) {
-          const content_height = sub.contentWindow.document.body.scrollHeight
-          sub.style.height = content_height + 'px';
-          new_height += (content_height + addwidth);
+        if(obj.id == 'readdiamondcontractiframe') {
+          if(window.readNumberOfIframes > 0) {
+            window.readNumberOfIframes--;
+            if(window.readNumberOfIframes > 0) return;
+          }
+        } else {
+          if(window.writeNumberOfIframes > 0) {
+            window.writeNumberOfIframes--;
+            if(window.writeNumberOfIframes > 0) return;
+          }
         }
-        obj.style.height = new_height + 'px';
+        // TODO: fix - if page is not visible during loading, it will calculate incorrect height.
+        for(const sub of obj.children) {
+          let content_height = sub.contentWindow.document.getElementById('readContractAccordion')?.getBoundingClientRect()?.bottom;
+          if(!content_height) {
+            const sel = sub.contentWindow.document.querySelectorAll('body > .card');
+            content_height = sel[sel.length - 1]?.getBoundingClientRect()?.bottom;
+          }
+          if (!content_height) {
+            content_height = sub.contentWindow.document.body.scrollHeight;
+          }
+          sub.style.height = (Math.ceil(content_height) + 50) + 'px';
+        }
         for(const sub of obj.children) {
           sub.parentElement.style.visibility = 'visible';
         }
