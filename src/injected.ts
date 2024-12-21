@@ -39,7 +39,6 @@ declare let tempI: number;
   if (window.readDiamondContractLoaded == false) {
     window.readDiamondContractLoaded = true;
     const iframes = document.getElementById("readdiamondcontractiframe")!.children!;
-    console.log("💎 iframes.length", iframes.length);
     for (let i = 0; i < iframes.length; i++) {
       const iframe = iframes?.item(i)! as HTMLIFrameElement;
       const address = iframe.getAttribute("data-address");
@@ -54,12 +53,15 @@ declare let tempI: number;
 (window as any).loadIframeSourceDiamondWrite = function (fLine: string) {
   if (window.writeDiamondContractLoaded == false) {
     window.writeDiamondContractLoaded = true;
-    // TODO: here is a link that is placed inside an iframe
-    const link = "/writecontract/index?m=light&v=21.10.1.1&a=0xA2981531d8d7bB7C17e1674E53F844a96BFf51b5&p=0x7E9e2FBC568E64EbF45E25959fBbc9F6cc66a9ff&n=sepolia&diamond=write";
-    if (fLine) {
-      (document.getElementById("writediamondcontractiframe") as HTMLIFrameElement).src = link + "&F=" + fLine;
-    } else {
-      (document.getElementById("writediamondcontractiframe") as HTMLIFrameElement).src = link;
+    const iframes = document.getElementById("writediamondcontractiframe")!.children!;
+
+    for (let i = 0; i < iframes.length; i++) {
+      const iframe = iframes?.item(i)! as HTMLIFrameElement;
+      const address = iframe.getAttribute("data-address");
+      const moduleAddress = iframe.getAttribute("data-module-address");
+      let link = `/writecontract/index?m=${window.mode}&v=21.10.1.1&a=${address}&p=${moduleAddress}&n=${strNetwork}&diamond=write&iframeId=${i}`;
+      if (fLine) link += "&F=" + fLine;
+      iframe.src = link;
     }
   }
 };

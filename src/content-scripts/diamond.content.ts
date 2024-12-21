@@ -193,7 +193,7 @@ const contentHtml = `
         <div id="loadingWriteDiamondContractframe" style="position:absolute; left:50%; margin-left:-31px">
             <!-- Spinner --><div id="overlayWriteDiamondContract" class="text-center py-10 "><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><div class="small text-muted mt-1">Loading</div></div><!-- End Spinner -->
         </div>
-        <div id="writeDiamondIframesTable" class="table-responsive" style=" visibility:hidden; line-height:0;">
+        <div id="writediamondcontractiframe" class="table-responsive" style=" visibility:hidden; line-height:0;">
         </div>
     </div>
 `;
