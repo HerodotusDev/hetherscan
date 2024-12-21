@@ -44,7 +44,7 @@ declare let tempI: number;
       const iframe = iframes?.item(i)! as HTMLIFrameElement;
       const address = iframe.getAttribute("data-address");
       const moduleAddress = iframe.getAttribute("data-module-address");
-      let link = `/readContract?m=${window.mode}&a=${address}&n=${strNetwork}&v=${moduleAddress}&diamond=read`;
+      let link = `/readContract?m=${window.mode}&a=${address}&n=${strNetwork}&v=${moduleAddress}&diamond=read&iframeId=${i}`;
       if (fLine) link += "&F=" + fLine;
       iframe.src = link;
     }
