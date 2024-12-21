@@ -81,6 +81,31 @@ $(document).ready(function () {
   }, 0);
 });
 
+// In original script obj is assumed to be an iframe.
+// However, in diamond view, it can also be a div containing multiple iframes.
+// So we handle that case in else block.
+window.resizeIframe = function(obj, addwidth) {
+  setTimeout(function () {
+      obj.style.height = 0;
+      if(obj.tagName === 'IFRAME') {
+        obj.style.height = (obj.contentWindow.document.body.scrollHeight + addwidth) + 20 + 'px';
+        obj.parentElement.style.visibility = 'visible';
+      } else {
+        // TODO: make them visible only after all iframes are loaded
+        let new_height = 20;
+        for(const sub of obj.children) {
+          const content_height = sub.contentWindow.document.body.scrollHeight
+          sub.style.height = content_height + 'px';
+          new_height += (content_height + addwidth);
+        }
+        obj.style.height = new_height + 'px';
+        for(const sub of obj.children) {
+          sub.parentElement.style.visibility = 'visible';
+        }
+      }
+  }, 300);
+};
+
 (window as any).activaTab = function (tab: string): void {
   var subtab: string = "0";
   let fNumber: string | undefined;

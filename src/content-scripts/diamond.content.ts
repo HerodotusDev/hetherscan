@@ -74,7 +74,6 @@ function generateIframesHtml(modules: string[], type: "read" | "write") {
       src="" 
       frameborder="0" 
       scrolling="yes" 
-      style="height: 600px;"
     ></iframe>
   `,
     )
