@@ -32,10 +32,10 @@
     },
     {
       "matches": [
-        "https://sepolia.etherscan.io/*"
+        "https://sepolia.etherscan.io/address/*"
       ],
       "js": [
-        "src/content-scripts/inject.content.js"
+        "src/content-scripts/contract-page-inject.content.js"
       ]
     },
     {
@@ -76,7 +76,7 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "src/injected.js",
+        "src/contract-page-inject.js",
         "src/proxy-diamond-inject.js"
       ],
       "matches": [

@@ -10,9 +10,6 @@ window.onload = function () {
     return;
   }
   window.contractframe = param +'diamondcontractiframe_' + searchParams.get("iframeId");
-  const capital = param.charAt(0).toUpperCase() + param.slice(1);
-
-  window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";
 
   setTimeout(function () {
     var obj = window.parent.document.getElementById(param + "diamondcontractiframe");

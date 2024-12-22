@@ -112,6 +112,8 @@ window.resizeIframe = function(obj, addwidth) {
         for(const sub of Array.from(obj.children)) {
           sub.parentElement!.style.visibility = 'visible';
         }
+        const capital = div.id == 'readdiamondcontractiframe' ? 'Read' : 'Write';
+        window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";
       }
   }, 300);
 };
