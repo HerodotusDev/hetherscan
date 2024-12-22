@@ -83,7 +83,8 @@ window.resizeIframe = function(obj, addwidth) {
       if(obj.tagName === 'IFRAME') {
         const iframe = obj as HTMLIFrameElement;
         iframe.style.height = (iframe.contentWindow!.document.body.scrollHeight + addwidth) + 20 + 'px';
-        iframe.parentElement!.style.visibility = 'visible';
+        const id = iframe.id;
+        if(id != 'readdiamondcontractiframe' && id != 'writediamondcontractiframe') iframe.parentElement!.style.visibility = 'visible';
       } else {
         const div = obj as HTMLDivElement;
         if(div.id == 'readdiamondcontractiframe') {

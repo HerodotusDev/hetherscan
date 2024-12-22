@@ -176,11 +176,11 @@ window.onload = () => {
 
 const tabsHtml = `
     <li id="ContentPlaceHolder1_li_readDiamond" class="nav-item snap-align-start" role="presentation">
-        <a class="nav-link" href="javascript:;" data-bs-toggle="pill" data-bs-target="#readDiamond" type="button" role="tab" aria-controls="readDiamond" aria-selected="false" onclick="javascript:updatehash('readDiamond');showLoader(window.readDiamondContractLoaded);loadIframeSourceDiamondRead();" tabindex="-1">Read as Diamond 🛰️<span class="d-none d-sm-inline-block"></span>
+        <a class="nav-link" href="javascript:;" data-bs-toggle="pill" data-bs-target="#readDiamond" type="button" role="tab" aria-controls="readDiamond" aria-selected="false" onclick="javascript:updatehash('readDiamond');showLoader(window.readDiamondContractLoaded);" tabindex="-1">Read as Diamond 🛰️<span class="d-none d-sm-inline-block"></span>
         </a>
     </li>
     <li id="ContentPlaceHolder1_li_writeDiamond" class="nav-item snap-align-start" role="presentation">
-        <a class="nav-link" href="javascript:;" data-bs-toggle="pill" data-bs-target="#writeDiamond" type="button" role="tab" aria-controls="writeDiamond" aria-selected="false" onclick="javascript:updatehash('writeDiamond');showLoader(window.writeDiamondContractLoaded);loadIframeSource5();" tabindex="-1">Write as Diamond 🛰️<span class="d-none d-sm-inline-block"></span>
+        <a class="nav-link" href="javascript:;" data-bs-toggle="pill" data-bs-target="#writeDiamond" type="button" role="tab" aria-controls="writeDiamond" aria-selected="false" onclick="javascript:updatehash('writeDiamond');showLoader(window.writeDiamondContractLoaded);" tabindex="-1">Write as Diamond 🛰️<span class="d-none d-sm-inline-block"></span>
         </a>
     </li>
 `;
