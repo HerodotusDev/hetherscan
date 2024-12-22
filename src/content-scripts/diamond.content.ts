@@ -97,12 +97,18 @@ function renderDiamondElements(modules: string[]) {
     const readContainer = document.querySelector("#readDiamondContract .table-responsive");
     if (readContainer) {
       readContainer.innerHTML = generateIframesHtml(modules, "read");
+      if (window.location.hash == "#readDiamond") {
+        (document.querySelector('#ContentPlaceHolder1_li_readDiamond a') as HTMLAnchorElement)?.click();
+      }
     }
 
     // Add multiple iframes to the write container
     const writeContainer = document.querySelector("#writeDiamondContract .table-responsive");
     if (writeContainer) {
       writeContainer.innerHTML = generateIframesHtml(modules, "write");
+      if (window.location.hash == "#writeDiamond") {
+        (document.querySelector('#ContentPlaceHolder1_li_writeDiamond a') as HTMLAnchorElement)?.click();
+      }
     }
   }
 }

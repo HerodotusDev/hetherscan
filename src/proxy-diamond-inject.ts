@@ -43,7 +43,7 @@ window.openModal = function openModal() {
       ) {
         window.parent.document
           .getElementById("readContractMessageProxy")
-          .classList.remove("d-flex");
+          ?.classList.remove("d-flex");
         parent.openProxyModal("writeproxycontractiframe");
       } else {
         var isInIFrame = window.location != window.parent.location;
@@ -52,10 +52,10 @@ window.openModal = function openModal() {
           var parentIframe = window.parent.document.getElementById(
             "writecontractiframe"
           );
-          parentIframe.style.minHeight = "600px";
+          parentIframe!.style.minHeight = "600px";
           window.parent.document
             .getElementById("readContractMessage")
-            .classList.remove("d-flex");
+            ?.classList.remove("d-flex");
         } else {
           $("#WalletModalProxyIframeNew").modal("show");
         }

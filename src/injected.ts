@@ -25,6 +25,12 @@ declare global {
     showLoader: (loaded?: boolean) => void;
     loadIframeEvents: () => void;
     myTocSelect: (text: string) => void;
+    contractframe?: string;
+    openModal: (iframeId: string) => void;
+    readNumberOfIframes?: number;
+    writeNumberOfIframes?: number;
+    resizeIframe: (obj: HTMLIFrameElement | HTMLDivElement, addwidth: number) => void;
+    openProxyModal: (iframeId: string) => void;
   }
   var $: any;
   var bootstrap: any;
@@ -68,23 +74,6 @@ declare let tempI: number;
     }
   }
 };
-function fixTabElements() {
-  document.querySelectorAll<HTMLAnchorElement>(".nav-subtabs li a").forEach((tab) => {
-    if (!bootstrap.Tab.getInstance(tab)) {
-      new bootstrap.Tab(tab);
-    }
-  });
-}
-fixTabElements();
-
-$(document).ready(function () {
-  const hash = window.location.hash;
-  setTimeout(() => {
-    if (hash == "#readDiamond" || hash == "#writeDiamond") {
-      window.activaTab(hash.slice(1));
-    }
-  }, 0);
-});
 
 // In original script obj is assumed to be an iframe.
 // However, in diamond view, it can also be a div containing multiple iframes.
@@ -92,34 +81,36 @@ $(document).ready(function () {
 window.resizeIframe = function(obj, addwidth) {
   setTimeout(function () {
       if(obj.tagName === 'IFRAME') {
-        obj.style.height = (obj.contentWindow.document.body.scrollHeight + addwidth) + 20 + 'px';
-        obj.parentElement.style.visibility = 'visible';
+        const iframe = obj as HTMLIFrameElement;
+        iframe.style.height = (iframe.contentWindow!.document.body.scrollHeight + addwidth) + 20 + 'px';
+        iframe.parentElement!.style.visibility = 'visible';
       } else {
-        if(obj.id == 'readdiamondcontractiframe') {
-          if(window.readNumberOfIframes > 0) {
+        const div = obj as HTMLDivElement;
+        if(div.id == 'readdiamondcontractiframe') {
+          if(window.readNumberOfIframes && window.readNumberOfIframes > 0) {
             window.readNumberOfIframes--;
             if(window.readNumberOfIframes > 0) return;
           }
         } else {
-          if(window.writeNumberOfIframes > 0) {
+          if(window.writeNumberOfIframes && window.writeNumberOfIframes > 0) {
             window.writeNumberOfIframes--;
             if(window.writeNumberOfIframes > 0) return;
           }
         }
         // TODO: fix - if page is not visible during loading, it will calculate incorrect height.
-        for(const sub of obj.children) {
-          let content_height = sub.contentWindow.document.getElementById('readContractAccordion')?.getBoundingClientRect()?.bottom;
+        for(const sub of Array.from(div.children) as HTMLIFrameElement[]) {
+          let content_height = sub.contentWindow!.document.getElementById('readContractAccordion')?.getBoundingClientRect()?.bottom;
           if(!content_height) {
-            const sel = sub.contentWindow.document.querySelectorAll('body > .card');
+            const sel = sub.contentWindow!.document.querySelectorAll('body > .card');
             content_height = sel[sel.length - 1]?.getBoundingClientRect()?.bottom;
           }
           if (!content_height) {
-            content_height = sub.contentWindow.document.body.scrollHeight;
+            content_height = sub.contentWindow!.document.body.scrollHeight;
           }
           sub.style.height = (Math.ceil(content_height) + 50) + 'px';
         }
-        for(const sub of obj.children) {
-          sub.parentElement.style.visibility = 'visible';
+        for(const sub of Array.from(obj.children)) {
+          sub.parentElement!.style.visibility = 'visible';
         }
       }
   }, 300);
