@@ -14,9 +14,13 @@
         "https://*.lineascan.build/*",
         "https://*.scrollscan.com/*",
         "https://fraxscan.com/*",
-        "https://*.snowscan.xyz/*"
+        "https://*.snowscan.xyz/*",
+        "https://*.arbiscan.io/*"
       ],
-      "js": ["src/content-scripts/tab-tracker.content.js", "src/content-scripts/login-herodotus.content.js"]
+      "js": [
+        "src/content-scripts/tab-tracker.content.js",
+        "src/content-scripts/login-herodotus.content.js"
+      ]
     },
     {
       "matches": [
@@ -28,7 +32,8 @@
         "https://*.lineascan.build/address/*",
         "https://*.scrollscan.com/address/*",
         "https://fraxscan.com/address/*",
-        "https://*.snowscan.xyz/address/*"
+        "https://*.snowscan.xyz/address/*",
+        "https://*.arbiscan.io/address/*"
       ],
       "js": [
         "src/content-scripts/diamond.content.js",
@@ -56,10 +61,14 @@
         "https://fraxscan.com/readContract*",
         "https://fraxscan.com/writecontract/index*",
         "https://*.snowscan.xyz/readContract*",
-        "https://*.snowscan.xyz/writecontract/index*"
+        "https://*.snowscan.xyz/writecontract/index*",
+        "https://*.arbiscan.io/readContract*",
+        "https://*.arbiscan.io/writecontract/index*"
       ],
       "all_frames": true,
-      "js": ["src/content-scripts/proxy-diamond-inject.content.js"]
+      "js": [
+        "src/content-scripts/proxy-diamond-inject.content.js"
+      ]
     },
     {
       "matches": [
@@ -71,9 +80,13 @@
         "https://*.lineascan.build/block/*",
         "https://*.scrollscan.com/block/*",
         "https://fraxscan.com/block/*",
-        "https://*.snowscan.xyz/block/*"
+        "https://*.snowscan.xyz/block/*",
+        "https://*.arbiscan.io/block/*"
       ],
-      "js": ["src/content-scripts/prove-block.content.js", "src/content-scripts/block-superset.content.js"]
+      "js": [
+        "src/content-scripts/prove-block.content.js",
+        "src/content-scripts/block-superset.content.js"
+      ]
     },
     {
       "matches": [
@@ -85,14 +98,20 @@
         "https://*.lineascan.build/tx/*",
         "https://*.scrollscan.com/tx/*",
         "https://fraxscan.com/tx/*",
-        "https://*.snowscan.xyz/tx/*"
+        "https://*.snowscan.xyz/tx/*",
+        "https://*.arbiscan.io/tx/*"
       ],
-      "js": ["src/content-scripts/transaction-superset.content.js"]
+      "js": [
+        "src/content-scripts/transaction-superset.content.js"
+      ]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/contract-page-inject.js", "src/proxy-diamond-inject.js"],
+      "resources": [
+        "src/contract-page-inject.js",
+        "src/proxy-diamond-inject.js"
+      ],
       "matches": [
         "https://*.etherscan.io/*",
         "https://*.polygonscan.com/*",
@@ -102,9 +121,12 @@
         "https://*.lineascan.build/*",
         "https://*.scrollscan.com/*",
         "https://fraxscan.com/*",
-        "https://*.snowscan.xyz/*"
+        "https://*.snowscan.xyz/*",
+        "https://*.arbiscan.io/*"
       ]
     }
   ],
-  "permissions": ["storage"]
+  "permissions": [
+    "storage"
+  ]
 }
