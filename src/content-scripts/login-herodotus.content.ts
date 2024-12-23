@@ -1,53 +1,54 @@
 import { deleteHerodotusData, getHerodotusData, setHerodotusData } from "../misc";
 import { getDestinationForOriginChainId } from "../storage-slot-api";
 
-const ethPriceElement = document.querySelector("#ethPrice > span");
-let loginButton: HTMLButtonElement;
-let loginModal: HTMLDivElement;
+interface HerodotusElements {
+  loginButton: HTMLButtonElement;
+  logoutButton: HTMLButtonElement;
+  loginModal: HTMLDivElement;
+  ethPriceElement: HTMLElement;
+}
 
-if (!ethPriceElement) throw new Error("Eth price element not found");
+function createLoginButton(): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.innerHTML = "🛰️ Log in with Herodotus";
+  button.classList.add("btn", "btn-primary", "btn-sm", "text-nowrap");
+  return button;
+}
 
-// Create the login button
-loginButton = document.createElement("button");
-loginButton.innerHTML = "🛰️ Log in with Herodotus";
-loginButton.classList.add("btn", "btn-primary", "btn-sm", "text-nowrap");
-loginButton.onclick = function () {
-  // Show modal
-  loginModal.classList.add("show");
-  loginModal.style.display = "block";
-};
+function createLogoutButton(elements: HerodotusElements): HTMLButtonElement {
+  const button = document.createElement("button");
+  button.innerHTML = "Logout";
+  button.classList.add("btn", "btn-outline-primary", "btn-sm");
+  button.onclick = () => handleLogout(elements);
+  return button;
+}
 
-// Create the logout button
-const logoutButton = document.createElement("button");
-logoutButton.innerHTML = "Logout";
-logoutButton.classList.add("btn", "btn-outline-primary", "btn-sm"); // margin-start for spacing
-logoutButton.onclick = function () {
+function handleLogout(elements: HerodotusElements): void {
+  const { loginButton, logoutButton, loginModal } = elements;
   setHerodotusData({ destinationChain: undefined, apiKey: undefined });
   loginButton.innerHTML = "🛰️ Log in with Herodotus";
   logoutButton.remove();
-  loginModal.classList.remove("show");
-  loginModal.style.display = "none";
-};
+  hideModal(loginModal);
+}
 
-// Insert login button
-ethPriceElement.parentNode!.insertBefore(loginButton, ethPriceElement.nextSibling);
+function showModal(modal: HTMLDivElement): void {
+  modal.classList.add("show");
+  modal.style.display = "block";
+}
 
-// Only show logout button when logged in
-getHerodotusData().then((data) => {
-  if (data?.apiKey) {
-    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
-  }
-});
+function hideModal(modal: HTMLDivElement): void {
+  modal.classList.remove("show");
+  modal.style.display = "none";
+}
 
-// Create the modal structure using Bootstrap classes
-loginModal = document.createElement("div");
-loginModal.classList.add("modal", "fade");
-
-// TODO: get origin chain id from etherscan url
-getDestinationForOriginChainId("11155111").then((chains) => {
+async function createLoginModal(elements: HerodotusElements): Promise<HTMLDivElement> {
+  const chains = await getDestinationForOriginChainId("11155111");
   const options = chains.map((chain) => `<option value="${chain}">${chain}</option>`).join("");
-  loginModal.setAttribute("tabindex", "-1");
-  loginModal.innerHTML = `
+
+  const modal = document.createElement("div");
+  modal.classList.add("modal", "fade");
+  modal.setAttribute("tabindex", "-1");
+  modal.innerHTML = `
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -72,63 +73,43 @@ getDestinationForOriginChainId("11155111").then((chains) => {
       </div>
     </div>
   `;
-  document.body.appendChild(loginModal);
 
-  // Retrieve stored data on load and update the UI
-  getHerodotusData().then((data) => {
-    if (data?.apiKey) {
-      // Data found, update button and fields
-      loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
+  document.body.appendChild(modal);
+  setupModalEventListeners(modal, elements);
+  return modal;
+}
 
-      const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
-      const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
+function setupModalEventListeners(modal: HTMLDivElement, elements: HerodotusElements): void {
+  const closeBtn = document.getElementById("closeLoginModal");
+  const submitBtn = document.getElementById("loginSubmitButton");
 
-      if (destinationChainSelect && data.destinationChain) {
-        destinationChainSelect.value = data.destinationChain;
-      }
+  closeBtn?.addEventListener("click", () => hideModal(modal));
+  submitBtn?.addEventListener("click", () => handleLoginSubmit(elements));
 
-      if (apiKeyInput && data.apiKey) {
-        apiKeyInput.value = data.apiKey;
-      }
-    }
-  });
-
-  // Handle the submit button click
-  (document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick = function () {
-    const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
-    const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
-
-    setHerodotusData({ destinationChain, apiKey });
-
-    loginButton.innerHTML = "🛰️ Herodotus Logged In";
-
-    // Add logout button if not present
-    if (!logoutButton.parentNode) {
-      ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
-    }
-
-    loginModal.classList.remove("show");
-    loginModal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target === modal) hideModal(modal);
   };
+}
 
-  // Close the modal when the user clicks the close button
-  document.getElementById("closeLoginModal")!.onclick = function () {
-    loginModal.classList.remove("show");
-    loginModal.style.display = "none";
-  };
+function handleLoginSubmit(elements: HerodotusElements): void {
+  const { loginButton, logoutButton, loginModal, ethPriceElement } = elements;
+  const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
+  const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
 
-  // Close the modal when the user clicks outside of it
-  window.onclick = function (event) {
-    if (event.target === loginModal) {
-      loginModal.classList.remove("show");
-      loginModal.style.display = "none";
-    }
-  };
-});
+  setHerodotusData({ destinationChain, apiKey });
+  loginButton.innerHTML = "🛰️ Herodotus Logged In";
 
-// Add "Clear Herodotus Data" link to footer if present
-const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end.gap-2");
-if (footerMenu) {
+  if (!logoutButton.parentNode) {
+    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
+  }
+
+  hideModal(loginModal);
+}
+
+function setupClearDataLink(elements: HerodotusElements): void {
+  const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end.gap-2");
+  if (!footerMenu) return;
+
   const clearDataLink = document.createElement("a");
   clearDataLink.className = "link-dark";
   clearDataLink.href = "#";
@@ -137,10 +118,8 @@ if (footerMenu) {
   clearDataLink.addEventListener("click", (e) => {
     e.preventDefault();
     deleteHerodotusData();
-    loginButton.innerHTML = "🛰️ Log in with Herodotus";
-    if (logoutButton.parentNode) {
-      logoutButton.remove();
-    }
+    elements.loginButton.innerHTML = "🛰️ Log in with Herodotus";
+    elements.logoutButton.remove();
   });
 
   const separator = document.createElement("span");
@@ -150,3 +129,43 @@ if (footerMenu) {
   footerMenu.insertBefore(separator, footerMenu.firstChild);
   footerMenu.insertBefore(clearDataLink, footerMenu.firstChild);
 }
+
+async function initializeHerodotus(): Promise<void> {
+  const ethPriceElement = document.querySelector("#ethPrice > span");
+  if (!ethPriceElement) throw new Error("Eth price element not found");
+
+  const elements: HerodotusElements = {
+    loginButton: createLoginButton(),
+    logoutButton: document.createElement("button"),
+    loginModal: document.createElement("div"),
+    ethPriceElement: ethPriceElement as HTMLElement,
+  };
+
+  elements.logoutButton = createLogoutButton(elements);
+
+  elements.loginButton.onclick = () => showModal(elements.loginModal);
+  ethPriceElement.parentNode!.insertBefore(elements.loginButton, ethPriceElement.nextSibling);
+
+  elements.loginModal = await createLoginModal(elements);
+
+  const data = await getHerodotusData();
+  if (data?.apiKey) {
+    elements.loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
+    ethPriceElement.parentNode!.insertBefore(elements.logoutButton, elements.loginButton.nextSibling);
+
+    const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
+    const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
+
+    if (destinationChainSelect && data.destinationChain) {
+      destinationChainSelect.value = data.destinationChain;
+    }
+    if (apiKeyInput && data.apiKey) {
+      apiKeyInput.value = data.apiKey;
+    }
+  }
+
+  setupClearDataLink(elements);
+}
+
+// Initialize the application
+initializeHerodotus().catch(console.error);
