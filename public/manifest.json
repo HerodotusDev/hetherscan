@@ -17,10 +17,7 @@
         "https://*.snowscan.xyz/*",
         "https://*.arbiscan.io/*"
       ],
-      "js": [
-        "src/content-scripts/tab-tracker.content.js",
-        "src/content-scripts/login-herodotus.content.js"
-      ]
+      "js": ["src/content-scripts/tab-tracker.content.js", "src/content-scripts/login-herodotus.content.js"]
     },
     {
       "matches": [
@@ -66,9 +63,7 @@
         "https://*.arbiscan.io/writecontract/index*"
       ],
       "all_frames": true,
-      "js": [
-        "src/content-scripts/proxy-diamond-inject.content.js"
-      ]
+      "js": ["src/content-scripts/proxy-diamond-inject.content.js"]
     },
     {
       "matches": [
@@ -83,10 +78,7 @@
         "https://*.snowscan.xyz/block/*",
         "https://*.arbiscan.io/block/*"
       ],
-      "js": [
-        "src/content-scripts/prove-block.content.js",
-        "src/content-scripts/block-superset.content.js"
-      ]
+      "js": ["src/content-scripts/prove-block.content.js", "src/content-scripts/block-superset.content.js"]
     },
     {
       "matches": [
@@ -101,17 +93,12 @@
         "https://*.snowscan.xyz/tx/*",
         "https://*.arbiscan.io/tx/*"
       ],
-      "js": [
-        "src/content-scripts/transaction-superset.content.js"
-      ]
+      "js": ["src/content-scripts/transaction-superset.content.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "src/contract-page-inject.js",
-        "src/proxy-diamond-inject.js"
-      ],
+      "resources": ["src/contract-page-inject.js", "src/proxy-diamond-inject.js"],
       "matches": [
         "https://*.etherscan.io/*",
         "https://*.polygonscan.com/*",
@@ -126,7 +113,5 @@
       ]
     }
   ],
-  "permissions": [
-    "storage"
-  ]
+  "permissions": ["storage"]
 }

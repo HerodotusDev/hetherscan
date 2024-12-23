@@ -20,7 +20,7 @@ export const ALL_SCANS = [
   "fraxscan.com",
   "snowscan.xyz",
   "testnet.snowscan.xyz",
-  'sepolia.arbiscan.io',
+  "sepolia.arbiscan.io",
 ] as const;
 
 export const RPC_ENDPOINTS: Record<(typeof ALL_SCANS)[number], string> = {
@@ -45,7 +45,7 @@ export const RPC_ENDPOINTS: Record<(typeof ALL_SCANS)[number], string> = {
   "fraxscan.com": "https://rpc.frax.com",
   "snowscan.xyz": "https://avalanche-c-chain-rpc.publicnode.com",
   "testnet.snowscan.xyz": "https://avalanche-fuji-c-chain-rpc.publicnode.com",
-  'sepolia.arbiscan.io': 'https://arbitrum-sepolia-rpc.publicnode.com',
+  "sepolia.arbiscan.io": "https://arbitrum-sepolia-rpc.publicnode.com",
 };
 
 export const CHAIN_IDS: Record<(typeof ALL_SCANS)[number], string> = {
@@ -70,5 +70,5 @@ export const CHAIN_IDS: Record<(typeof ALL_SCANS)[number], string> = {
   "fraxscan.com": "252",
   "snowscan.xyz": "43114",
   "testnet.snowscan.xyz": "43113",
-  'sepolia.arbiscan.io': '421614',
+  "sepolia.arbiscan.io": "421614",
 };

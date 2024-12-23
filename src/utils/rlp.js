@@ -1,10 +1,7 @@
 // RLP logic ported from ethereumjs: https://github.com/ethereumjs/ethereumjs-monorepo/tree/master/packages/rlp
 export function rlp_encode(input) {
   let bytes = rlp_encode_bytes(input);
-  return bytes.reduce(
-    (str, byte) => str + byte.toString(16).padStart(2, "0"),
-    "0x"
-  );
+  return bytes.reduce((str, byte) => str + byte.toString(16).padStart(2, "0"), "0x");
 
   function rlp_encode_bytes(input) {
     if (Array.isArray(input)) {
@@ -58,8 +55,7 @@ export function rlp_encode(input) {
     if (typeof hex !== "string") {
       throw new TypeError("hexToBytes: expected string, got " + typeof hex);
     }
-    if (hex.length % 2)
-      throw new Error("hexToBytes: received invalid unpadded hex");
+    if (hex.length % 2) throw new Error("hexToBytes: received invalid unpadded hex");
     const array = new Uint8Array(hex.length / 2);
     for (let i = 0; i < array.length; i++) {
       const j = i * 2;

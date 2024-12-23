@@ -78,44 +78,44 @@ declare let tempI: number;
 // In original script obj is assumed to be an iframe.
 // However, in diamond view, it can also be a div containing multiple iframes.
 // So we handle that case in else block.
-window.resizeIframe = function(obj, addwidth) {
+window.resizeIframe = function (obj, addwidth) {
   setTimeout(function () {
-      if(obj.tagName === 'IFRAME') {
-        const iframe = obj as HTMLIFrameElement;
-        iframe.style.height = (iframe.contentWindow!.document.body.scrollHeight + addwidth) + 20 + 'px';
-        const id = iframe.id;
-        if(id != 'readdiamondcontractiframe' && id != 'writediamondcontractiframe') iframe.parentElement!.style.visibility = 'visible';
+    if (obj.tagName === "IFRAME") {
+      const iframe = obj as HTMLIFrameElement;
+      iframe.style.height = iframe.contentWindow!.document.body.scrollHeight + addwidth + 20 + "px";
+      const id = iframe.id;
+      if (id != "readdiamondcontractiframe" && id != "writediamondcontractiframe") iframe.parentElement!.style.visibility = "visible";
+    } else {
+      const div = obj as HTMLDivElement;
+      if (div.id == "readdiamondcontractiframe") {
+        if (window.readNumberOfIframes && window.readNumberOfIframes > 0) {
+          window.readNumberOfIframes--;
+          if (window.readNumberOfIframes > 0) return;
+        }
       } else {
-        const div = obj as HTMLDivElement;
-        if(div.id == 'readdiamondcontractiframe') {
-          if(window.readNumberOfIframes && window.readNumberOfIframes > 0) {
-            window.readNumberOfIframes--;
-            if(window.readNumberOfIframes > 0) return;
-          }
-        } else {
-          if(window.writeNumberOfIframes && window.writeNumberOfIframes > 0) {
-            window.writeNumberOfIframes--;
-            if(window.writeNumberOfIframes > 0) return;
-          }
+        if (window.writeNumberOfIframes && window.writeNumberOfIframes > 0) {
+          window.writeNumberOfIframes--;
+          if (window.writeNumberOfIframes > 0) return;
         }
-        // TODO: fix - if page is not visible during loading, it will calculate incorrect height.
-        for(const sub of Array.from(div.children) as HTMLIFrameElement[]) {
-          let content_height = sub.contentWindow!.document.getElementById('readContractAccordion')?.getBoundingClientRect()?.bottom;
-          if(!content_height) {
-            const sel = sub.contentWindow!.document.querySelectorAll('body > .card');
-            content_height = sel[sel.length - 1]?.getBoundingClientRect()?.bottom;
-          }
-          if (!content_height) {
-            content_height = sub.contentWindow!.document.body.scrollHeight;
-          }
-          sub.style.height = (Math.ceil(content_height) + 50) + 'px';
-        }
-        for(const sub of Array.from(obj.children)) {
-          sub.parentElement!.style.visibility = 'visible';
-        }
-        const capital = div.id == 'readdiamondcontractiframe' ? 'Read' : 'Write';
-        window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";
       }
+      // TODO: fix - if page is not visible during loading, it will calculate incorrect height.
+      for (const sub of Array.from(div.children) as HTMLIFrameElement[]) {
+        let content_height = sub.contentWindow!.document.getElementById("readContractAccordion")?.getBoundingClientRect()?.bottom;
+        if (!content_height) {
+          const sel = sub.contentWindow!.document.querySelectorAll("body > .card");
+          content_height = sel[sel.length - 1]?.getBoundingClientRect()?.bottom;
+        }
+        if (!content_height) {
+          content_height = sub.contentWindow!.document.body.scrollHeight;
+        }
+        sub.style.height = Math.ceil(content_height) + 50 + "px";
+      }
+      for (const sub of Array.from(obj.children)) {
+        sub.parentElement!.style.visibility = "visible";
+      }
+      const capital = div.id == "readdiamondcontractiframe" ? "Read" : "Write";
+      window.parent.document.getElementById("loading" + capital + "DiamondContractframe")!.style.display = "none";
+    }
   }, 300);
 };
 
