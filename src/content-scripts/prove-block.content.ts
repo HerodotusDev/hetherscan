@@ -1,9 +1,7 @@
 // ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
 // ░█░█░█░█░█░█░█▀█░█░░░▀▀█
 // ░▀░▀░▀▀▀░▀▀░░▀░▀░▀▀▀░▀▀▀
-import axios from "axios";
-
-import { getHerodotusData, setHerodotusData } from "../misc";
+import { getHerodotusData } from "../misc";
 import { createNewModal, generateCheckboxes } from "../modal";
 import { apiRequestBuilder, getDashboardUrl, headerProperties, HEDODOTUS_URL } from "../storage-slot-api";
 
@@ -32,14 +30,21 @@ async function onProveBlockModalSubmit() {
     properties: allCheckedValues,
   });
 
-  const result = await axios.post(`${HEDODOTUS_URL}/submit-batch-query`, data, {
+  const result = await fetch(`${HEDODOTUS_URL}/submit-batch-query`, {
+    method: "POST",
+    body: JSON.stringify(data),
     headers: {
       "api-key": localData.apiKey,
       "Content-Type": "application/json",
-    },
+    } as HeadersInit,
   });
 
-  alert(`Prove account request submitted. Check the status here: ${getDashboardUrl(result.data.internalId)}`);
+  if (!result.ok) {
+    throw new Error(`HTTP error! status: ${result.status}`);
+  }
+  const responseData = await result.json();
+
+  alert(`Prove account request submitted. Check the status here: ${getDashboardUrl(responseData.internalId)}`);
 }
 
 let proveBlockModalId = "proveBlockModal";

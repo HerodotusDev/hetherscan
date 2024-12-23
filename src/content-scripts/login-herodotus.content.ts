@@ -42,86 +42,89 @@ getHerodotusData().then((data) => {
 // Create the modal structure using Bootstrap classes
 loginModal = document.createElement("div");
 loginModal.classList.add("modal", "fade");
-const destinationChains = getDestinationForOriginChainId("11155111");
-const options = destinationChains.map((chain) => `<option value="${chain}">${chain}</option>`).join("");
-loginModal.setAttribute("tabindex", "-1");
-loginModal.innerHTML = `
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Herodotus Settings</h5>
-        <button type="button" class="btn-close" aria-label="Close" id="closeLoginModal"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="destinationChain" class="form-label">Destination Chain:</label>
-          <select id="destinationChain" name="destinationChain" class="form-select">
-            ${options}
-          </select>
+
+// TODO: get origin chain id from etherscan url
+getDestinationForOriginChainId("11155111").then((chains) => {
+  const options = chains.map((chain) => `<option value="${chain}">${chain}</option>`).join("");
+  loginModal.setAttribute("tabindex", "-1");
+  loginModal.innerHTML = `
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Herodotus Settings</h5>
+          <button type="button" class="btn-close" aria-label="Close" id="closeLoginModal"></button>
         </div>
-        <div class="mb-3">
-          <label for="apiKey" class="form-label">API Key:</label>
-          <input type="text" id="apiKey" name="apiKey" class="form-control">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="destinationChain" class="form-label">Destination Chain:</label>
+            <select id="destinationChain" name="destinationChain" class="form-select">
+              ${options}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="apiKey" class="form-label">API Key:</label>
+            <input type="text" id="apiKey" name="apiKey" class="form-control">
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button id="loginSubmitButton" class="btn btn-primary">Submit</button>
+        <div class="modal-footer">
+          <button id="loginSubmitButton" class="btn btn-primary">Submit</button>
+        </div>
       </div>
     </div>
-  </div>
-`;
-document.body.appendChild(loginModal);
+  `;
+  document.body.appendChild(loginModal);
 
-// Retrieve stored data on load and update the UI
-getHerodotusData().then((data) => {
-  if (data?.apiKey) {
-    // Data found, update button and fields
-    loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
+  // Retrieve stored data on load and update the UI
+  getHerodotusData().then((data) => {
+    if (data?.apiKey) {
+      // Data found, update button and fields
+      loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
 
-    const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
-    const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
+      const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
+      const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;
 
-    if (destinationChainSelect && data.destinationChain) {
-      destinationChainSelect.value = data.destinationChain;
+      if (destinationChainSelect && data.destinationChain) {
+        destinationChainSelect.value = data.destinationChain;
+      }
+
+      if (apiKeyInput && data.apiKey) {
+        apiKeyInput.value = data.apiKey;
+      }
+    }
+  });
+
+  // Handle the submit button click
+  (document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick = function () {
+    const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
+    const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
+
+    setHerodotusData({ destinationChain, apiKey });
+
+    loginButton.innerHTML = "🛰️ Herodotus Logged In";
+
+    // Add logout button if not present
+    if (!logoutButton.parentNode) {
+      ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
     }
 
-    if (apiKeyInput && data.apiKey) {
-      apiKeyInput.value = data.apiKey;
-    }
-  }
-});
-
-// Handle the submit button click
-(document.getElementById("loginSubmitButton") as HTMLButtonElement).onclick = function () {
-  const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
-  const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
-
-  setHerodotusData({ destinationChain, apiKey });
-
-  loginButton.innerHTML = "🛰️ Herodotus Logged In";
-
-  // Add logout button if not present
-  if (!logoutButton.parentNode) {
-    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
-  }
-
-  loginModal.classList.remove("show");
-  loginModal.style.display = "none";
-};
-
-// Close the modal when the user clicks the close button
-document.getElementById("closeLoginModal")!.onclick = function () {
-  loginModal.classList.remove("show");
-  loginModal.style.display = "none";
-};
-
-// Close the modal when the user clicks outside of it
-window.onclick = function (event) {
-  if (event.target === loginModal) {
     loginModal.classList.remove("show");
     loginModal.style.display = "none";
-  }
-};
+  };
+
+  // Close the modal when the user clicks the close button
+  document.getElementById("closeLoginModal")!.onclick = function () {
+    loginModal.classList.remove("show");
+    loginModal.style.display = "none";
+  };
+
+  // Close the modal when the user clicks outside of it
+  window.onclick = function (event) {
+    if (event.target === loginModal) {
+      loginModal.classList.remove("show");
+      loginModal.style.display = "none";
+    }
+  };
+});
 
 // Add "Clear Herodotus Data" link to footer if present
 const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end.gap-2");

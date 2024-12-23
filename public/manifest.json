@@ -5,86 +5,44 @@
   "description": "Grants etherscan more functionality, including full diamond standard support & Herodotus proving services",
   "content_scripts": [
     {
-      "matches": [
-        "https://sepolia.etherscan.io/address/*"
-      ],
-      "js": [
-        "src/content-scripts/diamond.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/address/*"],
+      "js": ["src/content-scripts/diamond.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/readContract*",
-        "https://sepolia.etherscan.io/writecontract/index*"
-      ],
+      "matches": ["https://sepolia.etherscan.io/readContract*", "https://sepolia.etherscan.io/writecontract/index*"],
       "all_frames": true,
-      "js": [
-        "src/content-scripts/proxy-diamond-inject.content.js"
-      ]
+      "js": ["src/content-scripts/proxy-diamond-inject.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/*"
-      ],
-      "js": [
-        "src/content-scripts/tab-tracker.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/*"],
+      "js": ["src/content-scripts/tab-tracker.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/address/*"
-      ],
-      "js": [
-        "src/content-scripts/contract-page-inject.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/address/*"],
+      "js": ["src/content-scripts/contract-page-inject.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/*"
-      ],
-      "js": [
-        "src/content-scripts/login-herodotus.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/*"],
+      "js": ["src/content-scripts/login-herodotus.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/address/*"
-      ],
-      "js": [
-        "src/content-scripts/account-superset.content.js",
-        "src/content-scripts/prove-account.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/address/*"],
+      "js": ["src/content-scripts/account-superset.content.js", "src/content-scripts/prove-account.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/block/*"
-      ],
-      "js": [
-        "src/content-scripts/prove-block.content.js",
-        "src/content-scripts/block-superset.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/block/*"],
+      "js": ["src/content-scripts/prove-block.content.js", "src/content-scripts/block-superset.content.js"]
     },
     {
-      "matches": [
-        "https://sepolia.etherscan.io/tx/*"
-      ],
-      "js": [
-        "src/content-scripts/transaction-superset.content.js"
-      ]
+      "matches": ["https://sepolia.etherscan.io/tx/*"],
+      "js": ["src/content-scripts/transaction-superset.content.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": [
-        "src/contract-page-inject.js",
-        "src/proxy-diamond-inject.js"
-      ],
-      "matches": [
-        "https://sepolia.etherscan.io/*"
-      ]
+      "resources": ["src/contract-page-inject.js", "src/proxy-diamond-inject.js"],
+      "matches": ["https://sepolia.etherscan.io/*"]
     }
   ],
-  "permissions": [
-    "storage"
-  ]
+  "permissions": ["storage"]
 }
