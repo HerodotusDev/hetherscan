@@ -4,6 +4,7 @@
 import { getHerodotusData } from "../misc";
 import { createNewModal, generateCheckboxes } from "../modal";
 import { apiRequestBuilder, getDashboardUrl, headerProperties, HEDODOTUS_URL } from "../storage-slot-api";
+import { CHAIN_IDS } from "../utils/constants";
 
 async function onProveBlockModalSubmit() {
   const checkboxes = document.querySelectorAll(`#${proveBlockModalId} input[type="checkbox"]`);
@@ -26,7 +27,7 @@ async function onProveBlockModalSubmit() {
   const data = apiRequestBuilder.getBlockHeaderProperties({
     blockNumber: block,
     destinationChainId: localData.destinationChain,
-    originChainId: "11155111",
+    originChainId: CHAIN_IDS[window.location.hostname as keyof typeof CHAIN_IDS],
     properties: allCheckedValues,
   });
 

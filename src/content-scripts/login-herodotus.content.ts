@@ -1,5 +1,6 @@
 import { deleteHerodotusData, getHerodotusData, setHerodotusData } from "../misc";
 import { getDestinationForOriginChainId } from "../storage-slot-api";
+import { CHAIN_IDS } from "../utils/constants";
 
 interface HerodotusElements {
   loginButton: HTMLButtonElement;
@@ -42,7 +43,8 @@ function hideModal(modal: HTMLDivElement): void {
 }
 
 async function createLoginModal(elements: HerodotusElements): Promise<HTMLDivElement> {
-  const chains = await getDestinationForOriginChainId("11155111");
+  const chain_id = CHAIN_IDS[window.location.hostname as keyof typeof CHAIN_IDS];
+  const chains = await getDestinationForOriginChainId(chain_id);
   const options = chains.map((chain) => `<option value="${chain}">${chain}</option>`).join("");
 
   const modal = document.createElement("div");
@@ -97,7 +99,7 @@ function handleLoginSubmit(elements: HerodotusElements): void {
   const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
 
   setHerodotusData({ destinationChain, apiKey });
-  loginButton.innerHTML = "🛰️ HerodotusSettings";
+  loginButton.innerHTML = "🛰️ Herodotus Settings";
 
   if (!logoutButton.parentNode) {
     loginButton.parentNode!.appendChild(logoutButton);

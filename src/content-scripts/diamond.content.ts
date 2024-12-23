@@ -2,6 +2,7 @@ import { createPublicClient, http, parseAbi } from "viem";
 import { sepolia } from "viem/chains";
 
 import { getHerodotusData, setHerodotusData } from "../misc";
+import { RPC_ENDPOINTS } from "../utils/constants";
 
 const address = window.location.pathname.split("/")[2];
 
@@ -12,8 +13,9 @@ async function getDiamondModuleAddresses() {
 
   const diamondConfig = document.getElementById("diamond-config");
 
+  const endpoint = RPC_ENDPOINTS[window.location.hostname as keyof typeof RPC_ENDPOINTS];
   const client = createPublicClient({
-    transport: http("https://ethereum-sepolia.publicnode.com"),
+    transport: http(endpoint),
     chain: sepolia,
   });
 
@@ -98,7 +100,7 @@ function renderDiamondElements(modules: string[]) {
     if (readContainer) {
       readContainer.innerHTML = generateIframesHtml(modules, "read");
       if (window.location.hash == "#readDiamond") {
-        (document.querySelector('#ContentPlaceHolder1_li_readDiamond a') as HTMLAnchorElement)?.click();
+        (document.querySelector("#ContentPlaceHolder1_li_readDiamond a") as HTMLAnchorElement)?.click();
       }
     }
 
@@ -107,7 +109,7 @@ function renderDiamondElements(modules: string[]) {
     if (writeContainer) {
       writeContainer.innerHTML = generateIframesHtml(modules, "write");
       if (window.location.hash == "#writeDiamond") {
-        (document.querySelector('#ContentPlaceHolder1_li_writeDiamond a') as HTMLAnchorElement)?.click();
+        (document.querySelector("#ContentPlaceHolder1_li_writeDiamond a") as HTMLAnchorElement)?.click();
       }
     }
   }

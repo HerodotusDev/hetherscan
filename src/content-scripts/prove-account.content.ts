@@ -2,6 +2,7 @@ import { getHerodotusData } from "../misc";
 import { createNewModal, generateCheckboxes } from "../modal";
 import { accountProperties, apiRequestBuilder, getDashboardUrl, HEDODOTUS_URL } from "../storage-slot-api";
 import { apiCall } from "../utils/api";
+import { CHAIN_IDS, RPC_ENDPOINTS } from "../utils/constants";
 
 // ░█▄█░█▀█░█▀▄░█▀█░█░░░█▀▀
 // ░█░█░█░█░█░█░█▀█░█░░░▀▀█
@@ -167,7 +168,7 @@ async function onProveAccountModalSubmit() {
     account: address,
     blockNumber: blockNumber,
     destinationChainId: localData.destinationChain,
-    originChainId: "11155111",
+    originChainId: CHAIN_IDS[window.location.hostname as keyof typeof CHAIN_IDS],
     properties: ["BALANCE"],
   });
 
@@ -231,7 +232,7 @@ async function onProveAllAccountPropertiesSubmit() {
     account: address,
     blockNumber: blockNumber,
     destinationChainId: localData.destinationChain,
-    originChainId: "11155111",
+    originChainId: CHAIN_IDS[window.location.hostname as keyof typeof CHAIN_IDS],
     properties: allCheckedValues,
   });
 
@@ -250,11 +251,9 @@ async function onProveAllAccountPropertiesSubmit() {
 // ░█░█░░█░░▀▀█░█░░
 // ░▀░▀░▀▀▀░▀▀▀░▀▀▀
 
-const SEPOLIA_RPC_URL = "https://ethereum-sepolia.publicnode.com";
-
 async function getLatestBlock() {
   try {
-    const response = await apiCall(SEPOLIA_RPC_URL, {
+    const response = await apiCall(RPC_ENDPOINTS[window.location.hostname as keyof typeof RPC_ENDPOINTS], {
       method: "POST",
       body: JSON.stringify({
         jsonrpc: "2.0",
