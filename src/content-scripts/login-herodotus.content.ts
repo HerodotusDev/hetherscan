@@ -92,22 +92,22 @@ function setupModalEventListeners(modal: HTMLDivElement, elements: HerodotusElem
 }
 
 function handleLoginSubmit(elements: HerodotusElements): void {
-  const { loginButton, logoutButton, loginModal, ethPriceElement } = elements;
+  const { loginButton, logoutButton, loginModal } = elements;
   const destinationChain = (document.getElementById("destinationChain") as HTMLSelectElement).value;
   const apiKey = (document.getElementById("apiKey") as HTMLInputElement).value;
 
   setHerodotusData({ destinationChain, apiKey });
-  loginButton.innerHTML = "🛰️ Herodotus Logged In";
+  loginButton.innerHTML = "🛰️ HerodotusSettings";
 
   if (!logoutButton.parentNode) {
-    ethPriceElement.parentNode!.insertBefore(logoutButton, loginButton.nextSibling);
+    loginButton.parentNode!.appendChild(logoutButton);
   }
 
   hideModal(loginModal);
 }
 
 function setupClearDataLink(elements: HerodotusElements): void {
-  const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end.gap-2");
+  const footerMenu = document.querySelector(".d-flex.flex-wrap.justify-content-md-end");
   if (!footerMenu) return;
 
   const clearDataLink = document.createElement("a");
@@ -131,8 +131,12 @@ function setupClearDataLink(elements: HerodotusElements): void {
 }
 
 async function initializeHerodotus(): Promise<void> {
-  const ethPriceElement = document.querySelector("#ethPrice > span");
+  const ethPriceElement = document.querySelector("#ethPrice");
   if (!ethPriceElement) throw new Error("Eth price element not found");
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "inline-flex";
+  buttonContainer.style.gap = "0.5rem";
 
   const elements: HerodotusElements = {
     loginButton: createLoginButton(),
@@ -144,14 +148,16 @@ async function initializeHerodotus(): Promise<void> {
   elements.logoutButton = createLogoutButton(elements);
 
   elements.loginButton.onclick = () => showModal(elements.loginModal);
-  ethPriceElement.parentNode!.insertBefore(elements.loginButton, ethPriceElement.nextSibling);
+
+  buttonContainer.appendChild(elements.loginButton);
+  ethPriceElement.appendChild(buttonContainer);
 
   elements.loginModal = await createLoginModal(elements);
 
   const data = await getHerodotusData();
   if (data?.apiKey) {
-    elements.loginButton.innerHTML = "🛰️ Herodotus (Logged In)";
-    ethPriceElement.parentNode!.insertBefore(elements.logoutButton, elements.loginButton.nextSibling);
+    elements.loginButton.innerHTML = "🛰️ Herodotus Settings";
+    buttonContainer.appendChild(elements.logoutButton);
 
     const destinationChainSelect = document.getElementById("destinationChain") as HTMLSelectElement;
     const apiKeyInput = document.getElementById("apiKey") as HTMLInputElement;

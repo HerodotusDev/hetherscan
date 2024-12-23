@@ -5,43 +5,105 @@
   "description": "Grants etherscan more functionality, including full diamond standard support & Herodotus proving services",
   "content_scripts": [
     {
-      "matches": ["https://sepolia.etherscan.io/address/*"],
-      "js": ["src/content-scripts/diamond.content.js"]
+      "matches": [
+        "https://*.etherscan.io/*",
+        "https://*.polygonscan.com/*",
+        "https://*.bscscan.com/*",
+        "https://*.ftmscan.com/*",
+        "https://gnosisscan.io/*",
+        "https://*.lineascan.build/*",
+        "https://*.scrollscan.com/*",
+        "https://fraxscan.com/*",
+        "https://*.snowscan.xyz/*"
+      ],
+      "js": ["src/content-scripts/tab-tracker.content.js", "src/content-scripts/login-herodotus.content.js"]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/readContract*", "https://sepolia.etherscan.io/writecontract/index*"],
+      "matches": [
+        "https://*.etherscan.io/address/*",
+        "https://*.polygonscan.com/address/*",
+        "https://*.bscscan.com/address/*",
+        "https://*.ftmscan.com/address/*",
+        "https://gnosisscan.io/address/*",
+        "https://*.lineascan.build/address/*",
+        "https://*.scrollscan.com/address/*",
+        "https://fraxscan.com/address/*",
+        "https://*.snowscan.xyz/address/*"
+      ],
+      "js": [
+        "src/content-scripts/diamond.content.js",
+        "src/content-scripts/contract-page-inject.content.js",
+        "src/content-scripts/account-superset.content.js",
+        "src/content-scripts/prove-account.content.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://*.etherscan.io/readContract*",
+        "https://*.etherscan.io/writecontract/index*",
+        "https://*.polygonscan.com/readContract*",
+        "https://*.polygonscan.com/writecontract/index*",
+        "https://*.bscscan.com/readContract*",
+        "https://*.bscscan.com/writecontract/index*",
+        "https://*.ftmscan.com/readContract*",
+        "https://*.ftmscan.com/writecontract/index*",
+        "https://gnosisscan.io/readContract*",
+        "https://gnosisscan.io/writecontract/index*",
+        "https://*.lineascan.build/readContract*",
+        "https://*.lineascan.build/writecontract/index*",
+        "https://*.scrollscan.com/readContract*",
+        "https://*.scrollscan.com/writecontract/index*",
+        "https://fraxscan.com/readContract*",
+        "https://fraxscan.com/writecontract/index*",
+        "https://*.snowscan.xyz/readContract*",
+        "https://*.snowscan.xyz/writecontract/index*"
+      ],
       "all_frames": true,
       "js": ["src/content-scripts/proxy-diamond-inject.content.js"]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["src/content-scripts/tab-tracker.content.js"]
-    },
-    {
-      "matches": ["https://sepolia.etherscan.io/address/*"],
-      "js": ["src/content-scripts/contract-page-inject.content.js"]
-    },
-    {
-      "matches": ["https://sepolia.etherscan.io/*"],
-      "js": ["src/content-scripts/login-herodotus.content.js"]
-    },
-    {
-      "matches": ["https://sepolia.etherscan.io/address/*"],
-      "js": ["src/content-scripts/account-superset.content.js", "src/content-scripts/prove-account.content.js"]
-    },
-    {
-      "matches": ["https://sepolia.etherscan.io/block/*"],
+      "matches": [
+        "https://*.etherscan.io/block/*",
+        "https://*.polygonscan.com/block/*",
+        "https://*.bscscan.com/block/*",
+        "https://*.ftmscan.com/block/*",
+        "https://gnosisscan.io/block/*",
+        "https://*.lineascan.build/block/*",
+        "https://*.scrollscan.com/block/*",
+        "https://fraxscan.com/block/*",
+        "https://*.snowscan.xyz/block/*"
+      ],
       "js": ["src/content-scripts/prove-block.content.js", "src/content-scripts/block-superset.content.js"]
     },
     {
-      "matches": ["https://sepolia.etherscan.io/tx/*"],
+      "matches": [
+        "https://*.etherscan.io/tx/*",
+        "https://*.polygonscan.com/tx/*",
+        "https://*.bscscan.com/tx/*",
+        "https://*.ftmscan.com/tx/*",
+        "https://gnosisscan.io/tx/*",
+        "https://*.lineascan.build/tx/*",
+        "https://*.scrollscan.com/tx/*",
+        "https://fraxscan.com/tx/*",
+        "https://*.snowscan.xyz/tx/*"
+      ],
       "js": ["src/content-scripts/transaction-superset.content.js"]
     }
   ],
   "web_accessible_resources": [
     {
       "resources": ["src/contract-page-inject.js", "src/proxy-diamond-inject.js"],
-      "matches": ["https://sepolia.etherscan.io/*"]
+      "matches": [
+        "https://*.etherscan.io/*",
+        "https://*.polygonscan.com/*",
+        "https://*.bscscan.com/*",
+        "https://*.ftmscan.com/*",
+        "https://gnosisscan.io/*",
+        "https://*.lineascan.build/*",
+        "https://*.scrollscan.com/*",
+        "https://fraxscan.com/*",
+        "https://*.snowscan.xyz/*"
+      ]
     }
   ],
   "permissions": ["storage"]
