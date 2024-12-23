@@ -24,7 +24,7 @@ function getAllFiles(dir: string, fileList: string[] = []): string[] {
 
 async function build() {
   const allSrcFiles = getAllFiles(srcDir);
-  const entrypoints = allSrcFiles.filter((file) => file.endsWith(".ts") && !file.endsWith(".d.ts"));
+  const entrypoints = allSrcFiles.filter((file) => (file.endsWith(".ts") || file.endsWith(".js")) && !file.endsWith(".d.ts"));
 
   await Bun.build({
     entrypoints,

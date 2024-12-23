@@ -3,20 +3,13 @@ import { isNumeric, queryRPC, trimHex } from "../utils/utils";
 function onDocumentReady() {
   const address = extractAddressFromURL();
 
-  const xpathLast =
-    '//*[@id="ContentPlaceHolder1_divSummary"]/div[2]/div[2]/div/div/div[last()]';
-  const lastElement = document.evaluate(
-    xpathLast,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue;
+  const xpathLast = '//*[@id="ContentPlaceHolder1_divSummary"]/div[2]/div[2]/div/div/div[last()]';
+  const lastElement = document.evaluate(xpathLast, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as Element;
 
   showLoadingIndicator(lastElement);
 
   fetchAdditionalData(address).then((data) => {
-    document.getElementById("loading-indicator").remove();
+    document.getElementById("loading-indicator")?.remove();
     displayDataOnPage(data, lastElement);
   });
 }
@@ -25,16 +18,11 @@ function extractAddressFromURL() {
   return window.location.pathname.split("/")[2];
 }
 
-async function fetchAdditionalData(address) {
+async function fetchAdditionalData(address: string) {
   return queryRPC("eth_getProof", [address, ["0x0"], "latest"]);
 }
 
-function insertElement(
-  afterElement,
-  dataContent,
-  dataTitle,
-  isContract = false
-) {
+function insertElement(afterElement: Element, dataContent: string, dataTitle: string, isContract = false) {
   const newElement = document.createElement("div");
 
   if (!isNumeric(dataContent)) {
@@ -71,27 +59,21 @@ function insertElement(
             }
         </div>
     `;
-  afterElement.parentNode.insertBefore(newElement, afterElement.nextSibling);
+  afterElement.parentNode?.insertBefore(newElement, afterElement.nextSibling);
 }
 
-function displayDataOnPage(data, lastElement) {
-  const isContract =
-    document.getElementById("ContentPlaceHolder1_li_contracts") !== null;
+function displayDataOnPage(data: any, lastElement: Element) {
+  const isContract = document.getElementById("ContentPlaceHolder1_li_contracts") !== null;
 
   if (isContract) {
-    insertElement(
-      lastElement,
-      data.codeHash ?? data.keccakCodeHash,
-      "Code Hash",
-      true
-    );
+    insertElement(lastElement, data.codeHash ?? data.keccakCodeHash, "Code Hash", true);
     insertElement(lastElement, data.storageHash, "Storage Root", true);
   } else {
     insertElement(lastElement, data.nonce, "Nonce");
   }
 }
 
-function showLoadingIndicator(lastElement) {
+function showLoadingIndicator(lastElement: Element) {
   const loadingIndicator = document.createElement("div");
   loadingIndicator.setAttribute("id", "loading-indicator");
 
@@ -103,10 +85,7 @@ function showLoadingIndicator(lastElement) {
         </div>
     `;
 
-  lastElement.parentNode.insertBefore(
-    loadingIndicator,
-    lastElement.nextSibling
-  );
+  lastElement.parentNode?.insertBefore(loadingIndicator, lastElement.nextSibling);
 }
 
 if (document.readyState === "loading") {

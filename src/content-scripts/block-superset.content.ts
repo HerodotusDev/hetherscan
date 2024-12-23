@@ -5,35 +5,23 @@ function onDocumentReady() {
   const blockNumber = extractBlockNumberFromURL();
 
   const xpathLast = '//*[@id="collapseContent"]/div[last()]';
-  const lastElement = document.evaluate(
-    xpathLast,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue;
-  lastElement.classList.add("mb-4");
+  const lastElement = document.evaluate(xpathLast, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as Element;
+  lastElement?.classList.add("mb-4");
 
   showLoadingIndicator(lastElement);
 
   fetchAdditionalData(blockNumber).then((data) => {
-    document.getElementById("loading-indicator").remove();
+    document.getElementById("loading-indicator")?.remove();
     displayDataOnPage(data, lastElement);
   });
 }
 
-function containsProperty(property) {
+function containsProperty(property: string) {
   const container = document.getElementById("ContentPlaceHolder1_maintable");
 
   const xpathExpression = `//*[contains(normalize-space(.), '${property}')]`;
 
-  const res = document.evaluate(
-    xpathExpression,
-    container,
-    null,
-    XPathResult.BOOLEAN_TYPE,
-    null
-  );
+  const res = document.evaluate(xpathExpression, container as Node, null, XPathResult.BOOLEAN_TYPE, null);
   return res.booleanValue;
 }
 
@@ -42,11 +30,11 @@ function extractBlockNumberFromURL() {
   return "0x" + parseInt(str).toString(16);
 }
 
-async function fetchAdditionalData(blockNumber) {
+async function fetchAdditionalData(blockNumber: string) {
   return queryRPC("eth_getBlockByNumber", [blockNumber, false]);
 }
 
-function insertElement(afterElement, dataContent, dataTitle, textArea = false) {
+function insertElement(afterElement: Element, dataContent: string, dataTitle: string, textArea = false) {
   const newElement = document.createElement("div");
   newElement.classList.add("row", "mb-4");
 
@@ -69,15 +57,15 @@ function insertElement(afterElement, dataContent, dataTitle, textArea = false) {
             }
         </div>
     `;
-  afterElement.parentNode.insertBefore(newElement, afterElement.nextSibling);
+  afterElement.parentNode?.insertBefore(newElement, afterElement.nextSibling);
 }
 
-function rlp_encode_block(block) {
-  function process_null(num) {
+function rlp_encode_block(block: any) {
+  function process_null(num: string) {
     return parseInt(num, 16) == 0 ? "0x" : num;
   }
 
-  arr = [
+  const arr = [
     block.parentHash,
     block.sha3Uncles,
     block.miner,
@@ -110,7 +98,7 @@ function rlp_encode_block(block) {
   return rlp_encode(arr);
 }
 
-function displayDataOnPage(data, lastElement) {
+function displayDataOnPage(data: any, lastElement: Element) {
   insertElement(lastElement, rlp_encode_block(data), "Header RLP", true);
   insertElement(lastElement, data.logsBloom, "LogBloom");
   insertElement(lastElement, data.mixHash, "MixHash");
@@ -122,7 +110,7 @@ function displayDataOnPage(data, lastElement) {
   }
 }
 
-function showLoadingIndicator(lastElement) {
+function showLoadingIndicator(lastElement: Element) {
   const loadingIndicator = document.createElement("div");
   loadingIndicator.setAttribute("id", "loading-indicator");
 
@@ -134,10 +122,7 @@ function showLoadingIndicator(lastElement) {
         </div>
     `;
 
-  lastElement.parentNode.insertBefore(
-    loadingIndicator,
-    lastElement.nextSibling
-  );
+  lastElement.parentNode?.insertBefore(loadingIndicator, lastElement.nextSibling);
 }
 
 if (document.readyState === "loading") {

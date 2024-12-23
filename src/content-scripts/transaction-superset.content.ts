@@ -3,20 +3,13 @@ import { isNumeric, queryRPC } from "../utils/utils";
 function onDocumentReady() {
   const txHash = extractTxFromURL();
 
-  const xpathLast =
-    '//*[@id="ContentPlaceHolder1_collapseContent"]/div/div[last()]';
-  const lastElement = document.evaluate(
-    xpathLast,
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue;
+  const xpathLast = '//*[@id="ContentPlaceHolder1_collapseContent"]/div/div[last()]';
+  const lastElement = document.evaluate(xpathLast, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as Element;
 
   showLoadingIndicator(lastElement);
 
   fetchAdditionalData(txHash).then((data) => {
-    document.getElementById("loading-indicator").remove();
+    document.getElementById("loading-indicator")?.remove();
     displayDataOnPage(data, lastElement);
   });
 }
@@ -25,11 +18,11 @@ function extractTxFromURL() {
   return window.location.pathname.split("/")[2];
 }
 
-async function fetchAdditionalData(txHash) {
+async function fetchAdditionalData(txHash: string) {
   return queryRPC("eth_getTransactionByHash", [txHash]);
 }
 
-function insertElement(afterElement, dataContent, dataTitle) {
+function insertElement(afterElement: Element, dataContent: string, dataTitle: string) {
   const newElement = document.createElement("div");
   newElement.classList.add("row", "mb-4");
 
@@ -48,16 +41,16 @@ function insertElement(afterElement, dataContent, dataTitle) {
             ${dataContent}
         </div>
     `;
-  afterElement.parentNode.insertBefore(newElement, afterElement.nextSibling);
+  afterElement.parentNode?.insertBefore(newElement, afterElement.nextSibling);
 }
 
-function displayDataOnPage(data, lastElement) {
+function displayDataOnPage(data: any, lastElement: Element) {
   insertElement(lastElement, data.s, "Signature s");
   insertElement(lastElement, data.r, "Signature r");
   insertElement(lastElement, data.v, "Siganture v");
 }
 
-function showLoadingIndicator(lastElement) {
+function showLoadingIndicator(lastElement: Element) {
   const loadingIndicator = document.createElement("div");
   loadingIndicator.setAttribute("id", "loading-indicator");
 
@@ -69,10 +62,7 @@ function showLoadingIndicator(lastElement) {
         </div>
     `;
 
-  lastElement.parentNode.insertBefore(
-    loadingIndicator,
-    lastElement.nextSibling
-  );
+  lastElement.parentNode?.insertBefore(loadingIndicator, lastElement.nextSibling);
 }
 
 if (document.readyState === "loading") {

@@ -18,5 +18,5 @@
     "types": ["bun-types", "@types/chrome"],
     "outDir": "dist"
   },
-  "include": ["src", "build.ts"]
+  "include": ["src/**/*.ts", "src/**/*.js", "build.ts"]
 }
